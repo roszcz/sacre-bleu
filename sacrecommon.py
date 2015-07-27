@@ -1,4 +1,6 @@
 import facebook
+import time
+import picamera
 
 def get_secrets(filenames):
 	with open(filenames[0], 'r') as myfile:
@@ -33,3 +35,13 @@ def make_cfg():
 	    }
     
     return cfg
+
+def take_photo():
+    picname = time.strftime('%Y_%m_%d__%H%M%S') + '.jpg'
+    with picamera.PiCamera() as camera:
+	camera.resolution = (666, 420)
+	camera.start_preview()
+	# Camera warm up
+	time.sleep(2)
+	camera.capture(picname)
+    return picname
