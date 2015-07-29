@@ -1,14 +1,19 @@
 #!/home/yo/.virtualenvs/sacrebleu/bin/python
 import random
 import os
+import sys
 from sacrecommon import *
+
+long_exposure = False
+if len(sys.argv) > 1:
+    long_exposure = True
 
 api = get_api()
 
-picname = take_photo()
+picname = take_photo(long_exposure)
 
-msg = 'this is a random number: ' + str(random.random())
+msg = 'tania przestrzen reklamowa'
 
-api.put_photo(image = open(picname), message = msg)
+post_to_album(api, picname, msg)
 
 os.remove(picname)
