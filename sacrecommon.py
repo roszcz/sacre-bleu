@@ -1,4 +1,5 @@
 import facebook
+import subprocess
 from fractions import Fraction
 import time
 import picamera
@@ -83,7 +84,13 @@ def post_to_album(api, picname, message):
     cock = picname[12:18]
     struct = time.strptime(cock, '%H%M%S')
     clock_msg = time.strftime('%X', struct)
+
+    # Extend message with clock info
     message = message + '\n\n\n' + clock_msg
+
+    # and ip
+#    ipinfo = subprocess.check_output('ifconfig |grep inet', shell=True)
+ #   message = message + '\n\n\n' + ipinfo
     api.put_photo(image = open(picname),\
 		  message = message,\
 		  album_path = id + '/photos')

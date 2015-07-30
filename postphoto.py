@@ -16,4 +16,6 @@ msg = 'tania przestrzen reklamowa'
 
 post_to_album(api, picname, msg)
 
+
+# FIXME - Uncomment this before there is no more space pls
 os.remove(picname)
