@@ -79,6 +79,11 @@ def take_photo(long = False):
 def post_to_album(api, picname, message):
     # Get desired album id
     id = get_album_id(api, picname)
+    # Add clock information to post message
+    cock = picname[12:18]
+    struct = time.strptime(cock, '%H%M%S')
+    clock_msg = time.strftime('%X', struct)
+    message = message + '\n\n\n' + clock_msg
     api.put_photo(image = open(picname),\
 		  message = message,\
 		  album_path = id + '/photos')
