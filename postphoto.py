@@ -4,9 +4,9 @@ import os
 import sys
 from sacrecommon import *
 
-long_exposure = False
+long_exposure = 0
 if len(sys.argv) > 1:
-    long_exposure = True
+    long_exposure = 6 
 
 api = get_api()
 
@@ -18,4 +18,5 @@ post_to_album(api, picname, msg)
 
 
 # FIXME - Uncomment this before there is no more space pls
+#if len(sys.argv) > 1:
 os.remove(picname)

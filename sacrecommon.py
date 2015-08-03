@@ -41,15 +41,27 @@ def make_cfg():
 def get_album_id(api, picname):
     # XXX Possible date string fuckup
     date = picname[0:10]
+    hour = picname[12:14]
+
+    # Add AM/PM albums each day at 14
+    if int(hour) >= 14:
+	postfix = ' p.m.'
+    else:
+	postfix = ' a.m.'
+
+    # Name album with the current pic date
     time_struct = time.strptime(date, '%Y_%m_%d')
     album_name = time.strftime('%Y %B %d', time_struct)
+
+    # And add am/pm postfix
+    album_name += postfix
     albums = api.get_object('me/albums')['data']
 
     # Iterate through albums untill the proper one is found
     # TODO some better search mechanism might be desired
     id = None
     for bum in albums:
-	print bum['name']
+	#print bum['name']
 	if album_name in bum['name']:
 	    id = bum['id']
 
@@ -63,13 +75,17 @@ def get_album_id(api, picname):
     
     return id
 
-def take_photo(long = False):
+def take_photo(long = 0):
+    low_hd = (1280, 720)
+    full_hd = (1920, 1080)
+    resolution = full_hd
     picname = time.strftime('%Y_%m_%d__%H%M%S') + '.jpg'
     with picamera.PiCamera() as camera:
 	camera.resolution = (666, 420)
-	if long:
+	camera.resolution = resolution
+	if long is not 0:
 	    camera.framerate = Fraction(1,6)
-	    camera.shutter_speed = 6 * 1000000 
+	    camera.shutter_speed = long * 1000000 
 	    camera.exposure_mode = 'off'
 	camera.start_preview()
 	# Camera warm up

@@ -2,5 +2,8 @@
 *.swp
 *.pyc
 *.jpg
+*.json
+*.mp4
+*.mpg
 
 
