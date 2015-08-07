@@ -19,7 +19,7 @@ clock = picname[12:18]
 struct = time.strptime(clock, '%H%M%S')
 
 # Post periodically
-if ((struct.tm_min%60)==0):
+if (struct.tm_min==25 and struct.tm_hour==1):
     print 'dupa'
     api = get_api()
     post_to_album(api, picname, msg)
