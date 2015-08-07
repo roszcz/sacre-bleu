@@ -9,7 +9,6 @@ long_exposure = 0
 if len(sys.argv) > 1:
     long_exposure = 6 
 
-api = get_api()
 
 picname = take_photo(long_exposure)
 
@@ -22,6 +21,7 @@ struct = time.strptime(clock, '%H%M%S')
 # Post periodically
 if ((struct.tm_min%60)==0):
     print 'dupa'
+    api = get_api()
     post_to_album(api, picname, msg)
 
 

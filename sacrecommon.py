@@ -138,7 +138,7 @@ def post_to_album(api, picname, message):
 
 def post_video(api, video_id, msg):
     attachment =  {
-	    'name': 'Time lapse',
+	    'name': 'Chmury',
 	    'link': 'https://www.youtube.com/watch?v=' + str(video_id),
 	    'caption': 'fully automatic time-lapse generator',
 	    'description': 'Drozsza przestrzen reklamowa',

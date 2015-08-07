@@ -25,7 +25,9 @@ def make_video(foldername):
     framerate = 15
     
     # Dunno how to make the movie smoother?
-    command = 'ffmpeg -framerate ' + str(framerate) + ' '\
+    # Must provide a full path to ffmpeg or cron bash won't know
+    # Where to find it? 
+    command = '/usr/local/bin/ffmpeg -framerate ' + str(framerate) + ' '\
 	      '-i ' + foldername + '/movieme100%04d.jpg '\
 	      '-c:v libx264 -r 30 '\
 	      '-pix_fmt yuv420p ' + moviename + '.mpg'
