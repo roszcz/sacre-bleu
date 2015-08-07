@@ -6,6 +6,7 @@ import os
 import random
 import sys
 import time
+import pickle
 
 from apiclient.discovery import build
 from apiclient.errors import HttpError
@@ -120,13 +121,14 @@ def initialize_upload(youtube, options):
     media_body=MediaFileUpload(options.file, chunksize=-1, resumable=True)
   )
 
-  resumable_upload(insert_request)
+  return resumable_upload(insert_request)
 
 # This method implements an exponential backoff strategy to resume a
 # failed upload.
 def resumable_upload(insert_request):
   response = None
   error = None
+  id = None
   retry = 0
   while response is None:
     try:
@@ -134,6 +136,7 @@ def resumable_upload(insert_request):
       status, response = insert_request.next_chunk()
       if 'id' in response:
         print "Video id '%s' was successfully uploaded." % response['id']
+	id = response['id']
       else:
         exit("The upload failed with an unexpected response: %s" % response)
     except HttpError, e:
@@ -156,6 +159,34 @@ def resumable_upload(insert_request):
       print "Sleeping %f seconds and then retrying..." % sleep_seconds
       time.sleep(sleep_seconds)
 
+  return id
+
+def upload_video(details):
+  # Evil argparser fuckup hack
+  # This loads all the necessary arguments saved 
+  # From running this file as a separate program
+  argsfile = open('args.pickle','rb')
+  args = pickle.load(argsfile)
+
+  args.file = details['file']
+  args.title = details['title']
+  args.privacyStatus = details['privacyStatus']
+  args.description = details['description']
+
+  if not os.path.exists(args.file):
+    exit("Please specify a valid file using the --file= parameter.")
+
+  youtube = get_authenticated_service(args)
+  id = None
+  try:
+    id = initialize_upload(youtube, args)
+  except HttpError, e:
+    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+
+  return id
+
+
+
 if __name__ == '__main__':
   argparser.add_argument("--file", required=True, help="Video file to upload")
   argparser.add_argument("--title", help="Video title", default="Test Title")
@@ -169,6 +200,11 @@ if __name__ == '__main__':
   argparser.add_argument("--privacyStatus", choices=VALID_PRIVACY_STATUSES,
     default=VALID_PRIVACY_STATUSES[0], help="Video privacy status.")
   args = argparser.parse_args()
+
+  # Quick pickle hack 
+  with open('args.pickle', 'wb') as picklefile:
+      pickle.dump(args, picklefile)
+      print 'dupa'
 
   if not os.path.exists(args.file):
     exit("Please specify a valid file using the --file= parameter.")

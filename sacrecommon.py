@@ -1,4 +1,5 @@
 import facebook
+import os
 import subprocess
 from fractions import Fraction
 import time
@@ -49,12 +50,14 @@ def get_album_id(api, picname):
     else:
 	postfix = ' a.m.'
 
+    # Remove postfix at least temporarly
+
     # Name album with the current pic date
     time_struct = time.strptime(date, '%Y_%m_%d')
     album_name = time.strftime('%Y %B %d', time_struct)
 
     # And add am/pm postfix
-    album_name += postfix
+#    album_name += postfix
     albums = api.get_object('me/albums')['data']
 
     # Iterate through albums untill the proper one is found
@@ -76,13 +79,25 @@ def get_album_id(api, picname):
     return id
 
 def take_photo(long = 0):
+
+    # Possible resolutions
     low_hd = (1280, 720)
     full_hd = (1920, 1080)
+
+    # Set
     resolution = full_hd
-    picname = time.strftime('%Y_%m_%d__%H%M%S') + '.jpg'
+
+    # Date string confusion
+    datestr = time.strftime('%Y_%m_%d')
+    hourstr = time.strftime('%H%M%S')
+    picname = datestr + '__' + hourstr + '.jpg'
+
+    # Picture taking
     with picamera.PiCamera() as camera:
 	camera.resolution = (666, 420)
 	camera.resolution = resolution
+
+	# Long exposure is possible
 	if long is not 0:
 	    camera.framerate = Fraction(1,6)
 	    camera.shutter_speed = long * 1000000 
@@ -90,12 +105,22 @@ def take_photo(long = 0):
 	camera.start_preview()
 	# Camera warm up
 	time.sleep(2)
-	camera.capture(picname)
+	savename = datestr + '/' + picname
+
+	# Check dir existance
+	if not os.path.isdir(datestr):
+	    os.makedirs(datestr)
+	camera.capture(savename)
     return picname
 
 def post_to_album(api, picname, message):
+    # Date names directories
+    datestr = picname[0:10]
+    picpath = datestr + '/' + picname
+
     # Get desired album id
     id = get_album_id(api, picname)
+
     # Add clock information to post message
     cock = picname[12:18]
     struct = time.strptime(cock, '%H%M%S')
@@ -107,7 +132,16 @@ def post_to_album(api, picname, message):
     # and ip
 #    ipinfo = subprocess.check_output('ifconfig |grep inet', shell=True)
  #   message = message + '\n\n\n' + ipinfo
-    api.put_photo(image = open(picname),\
+    api.put_photo(image = open(picpath),\
 		  message = message,\
 		  album_path = id + '/photos')
 
+def post_video(api, video_id, msg):
+    attachment =  {
+	    'name': 'Time lapse',
+	    'link': 'https://www.youtube.com/watch?v=' + str(video_id),
+	    'caption': 'fully automatic time-lapse generator',
+	    'description': 'Drozsza przestrzen reklamowa',
+    }
+
+    api.put_wall_post(message = msg, attachment = attachment)

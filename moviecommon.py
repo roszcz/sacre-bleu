@@ -1,6 +1,8 @@
 import glob
+import time
 import subprocess as sp
 import os
+from upload_video import upload_video
 
 def arrange_images(foldername):
     # Assumes that script is run from the
@@ -15,6 +17,44 @@ def arrange_images(foldername):
 	new_name = foldername + '/movieme' + str(it + 1000000) + '.jpg'
 	os.rename(file, new_name)
 
-def make_video():
-    command = 'ffmpeg -framerate 8 -i movie/movieme100%04d.jpg -c:v libx264 -r 30 -pix_fmt yuv420p out2.mpg'
+def make_video(foldername):
+    # Takes date / folder and creates a mpg 
+    moviename = foldername
+
+    # Settings
+    framerate = 15
+    
+    # Dunno how to make the movie smoother?
+    command = 'ffmpeg -framerate ' + str(framerate) + ' '\
+	      '-i ' + foldername + '/movieme100%04d.jpg '\
+	      '-c:v libx264 -r 30 '\
+	      '-pix_fmt yuv420p ' + moviename + '.mpg'
     sp.call(command, shell=True)
+
+def push_video(foldername):
+    # Hope those work great
+    arrange_images(foldername)
+    make_video(foldername)
+
+    # Push to youtube
+    struct = time.strptime(foldername, '%Y_%m_%d')
+    title = time.strftime('%Y %B %d in super slow motion')
+    
+    description = 'This video is a part of sacrebleu project:\n' +\
+	    'https://www.facebook.com/pages/sacre-bleu/119890141687062'
+
+    # TODO - make this listed somewhen
+    privacyStatus = 'unlisted'
+
+    details = {\
+	    'file' : foldername + '.mpg',\
+	    'title' : title,\
+	    'description' : description,\
+	    'privacyStatus' : privacyStatus\
+	    }
+
+    id = upload_video(details)
+
+    return id
+
+
