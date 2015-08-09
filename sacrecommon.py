@@ -113,7 +113,19 @@ def take_photo(long = 0):
 	camera.capture(savename)
     return picname
 
-def post_to_album(api, picname, message):
+def post_to_wall(picname, message):
+    # Get facebook api
+    api = get_api()
+
+    # Pictures posted to wall are held at the main dir
+    # FIXME - add some dir structure
+    api.put_photo(image = open(picname),\
+                  message = message)
+
+
+def post_to_album(picname, message):
+    # Get facebook api
+    api = get_api()
     # Date names directories
     datestr = picname[0:10]
     picpath = datestr + '/' + picname
@@ -141,7 +153,7 @@ def post_video(api, video_id, msg):
 	    'name': 'Chmury',
 	    'link': 'https://www.youtube.com/watch?v=' + str(video_id),
 	    'caption': 'fully automatic time-lapse generator',
-	    'description': 'Drozsza przestrzen reklamowa',
+	    'description': 'film wygenerowany automatycznie',
     }
 
     api.put_wall_post(message = msg, attachment = attachment)

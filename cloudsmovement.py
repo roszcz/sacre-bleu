@@ -2,65 +2,97 @@ from glob import glob
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib import dates
 import pickle
+import random
 import time
+import datetime
 import os
 import cv2
-
-# Get sorted files
-files = glob('2015_08_07/*.jpg')
-# Should remember this
-files.sort(key=os.path.getmtime)
 
 def diffImg(t0, t1, t2):
     d1 = cv2.absdiff(t2, t1)
     d2 = cv2.absdiff(t1, t0)
     return cv2.bitwise_and(d1, d2)
 
-# tic toc mechanism
-t = time.time()
+def last_hour_plot(foldername, calculate = True,\
+                   plotname = 'movements.png',\
+                   N = 60):
+    # Randomly expand time
+    N += random.randint(0,40)
+    # Get sorted files
+    files = glob(foldername + '/*.jpg')
+    # Should remember this
+    files.sort(key=os.path.getmtime)
 
-if False:
-    movements = []
-    # FIXME ugly loop | not really
-    N = len(files)
-    for it in range(1, N-1):
-	img0 = cv2.imread(files[it-1])
-	gray0 = cv2.cvtColor(img0, cv2.COLOR_BGR2GRAY)
-	img1 = cv2.imread(files[it])
-	gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-	img2 = cv2.imread(files[it+1])
-	gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-	if (it%20==3):
-	    print it, time.time() - t
+    # Get file creation times for x-axis
+    times = []
+    for file in files:
+        t = os.path.getmtime(file)
+        dtime = datetime.datetime.fromtimestamp(t)
+        times.append(dtime)
 
-	movimage = diffImg(img0, img1, img2)
-	movements.append(movimage.sum())
+    # Cut files to last N files
+    files = files[-N:]
+    times = times[-N:]
 
-file = open('move.pickle','rb')
-movements = pickle.load(file)
+    # tic toc mechanism
+    t = time.time()
 
-with plt.xkcd():
-    # Based on "Stove Ownership" from XKCD by Randall Monroe
-    # http://xkcd.com/418/
+    if calculate:
+        movements = []
+        for it in range(1, N-1):
+            img0 = cv2.imread(files[it-1])
+            gray0 = cv2.cvtColor(img0, cv2.COLOR_BGR2GRAY)
+            img1 = cv2.imread(files[it])
+            gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+            img2 = cv2.imread(files[it+1])
+            gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+            if (it%20==3):
+                print it, time.time() - t
 
-    fig = plt.figure()
-    ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
-    ax.spines['right'].set_color('none')
-    ax.spines['top'].set_color('none')
-    plt.xticks([])
-    plt.yticks([])
-    miny = min(movements)
-    maxy = max(movements)
-    mean = (maxy + miny)/3.
-    ax.set_ylim([miny, maxy])
-    plt.annotate(\
-	'mucha?',\
-	xy=(190, mean), arrowprops=dict(arrowstyle='->'), xytext=(250, 1.6*mean))
+            movimage = diffImg(img0, img1, img2)
+            movements.append(movimage.sum())
+    else:
+        # FIXME - no saving mechanism
+        file = open('move.pickle','rb')
+        movements = pickle.load(file)
 
-    plt.plot(movements, 'm')
 
-    plt.xlabel('time')
-    plt.ylabel('movement\ndetection')
+    with plt.xkcd():
+        # Based on "Stove Ownership" from XKCD by Randall Monroe
+        # http://xkcd.com/418/
 
-fig.savefig('movements.png')
+        fig = plt.figure()
+        ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+        ax.spines['right'].set_color('none')
+        ax.spines['top'].set_color('none')
+    #    plt.xticks([times[0],times[-1]])
+        miny = min(movements)*0.9
+        maxy = max(movements)*1.1
+        mean = (maxy + miny)/3.
+        plt.yticks([])
+        ax.set_ylim([miny, maxy])
+
+	# random color
+	colors = ['m', 'b', 'c', 'r', 'k', 'g']
+	clr = random.choice(colors)
+
+        plt.plot(times[1:-1], movements, clr)
+
+        plt.xlabel('time')
+        plt.title('RECENT CELESTIAL ACTIVITY')
+        plt.ylabel('action')
+
+        # number of ticks?
+        formater = dates.DateFormatter('%H:%M')
+        hours = dates.HourLocator()
+        minutes = dates.MinuteLocator(interval = 15)
+        ax.xaxis.set_major_locator(minutes)
+        ax.xaxis.set_minor_locator(minutes)
+        ax.xaxis.set_major_formatter(formater)
+        ax.tick_params(axis='x', which='both', bottom='off', top='off')
+
+    #plt.show()
+    fig.savefig(plotname)
+    return plotname

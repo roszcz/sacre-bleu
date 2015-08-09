@@ -1,4 +1,5 @@
 from glob import glob
+import time
 import pickle
 import matplotlib
 matplotlib.use('Agg')
@@ -9,20 +10,29 @@ import cv2
 
 # Import all the photos into a list
 images = []
-files = glob('2015_08_07/*.jpg')
+files = glob('2015_08_08/*.jpg')
+files = files[50:400]
 
 # Should remember this
 files.sort(key=os.path.getmtime)
 
-# FIXME obviously
-file = open('tmp.pickle','rb')
-brightnesses = pickle.load(file)
+# Load or recalculate
 if False:
+    t = time.time()
     brightnesses = []
     for file in files:
 	img = cv2.imread(file)
 	imgh = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-	brightnesses.append(imgh[:,:,2].sum())
+	brightnesses.append(imgh[:,:,0].sum())
+	if len(brightnesses)%20==4:
+	    print time.time() -t, len(brightnesses)
+    file = open('brightness.pickle', 'wb')
+    pickle.dump(brightnesses, file)
+else:
+    file = open('brightness.pickle', 'rb')
+    brightnesses = pickle.load(file)
+
+
 
 with plt.xkcd():
     # Based on "Stove Ownership" from XKCD by Randall Monroe
