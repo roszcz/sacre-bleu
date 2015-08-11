@@ -94,7 +94,6 @@ def take_photo(long = 0):
 
     # Picture taking
     with picamera.PiCamera() as camera:
-	camera.resolution = (666, 420)
 	camera.resolution = resolution
 
 	# Long exposure is possible

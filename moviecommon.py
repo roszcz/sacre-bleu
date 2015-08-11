@@ -22,7 +22,7 @@ def make_video(foldername):
     moviename = foldername
 
     # Settings
-    framerate = 15
+    framerate = 20 
     
     # Dunno how to make the movie smoother?
     # Must provide a full path to ffmpeg or cron bash won't know

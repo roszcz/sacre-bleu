@@ -8,11 +8,10 @@ import os
 dirs = [f for f in os.listdir(os.getcwd()) if os.path.isdir(f)]
 newest = max(dirs, key = os.path.getmtime)
 
-api = get_api()
-
 # Upload to Youtube
 video_id = push_video(newest)
 
 # Publish with current date as a message
-message = 'opublikowano ' + time.strftime('%d %B %Y, %H:%M') 
+api = get_api()
+message = '_' + time.strftime('%d %B %Y, %H:%M') 
 post_video(api, video_id, message)

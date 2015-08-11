@@ -17,9 +17,9 @@ def diffImg(t0, t1, t2):
 
 def last_hour_plot(foldername, calculate = True,\
                    plotname = 'movements.png',\
-                   N = 60):
+                   N = 120):
     # Randomly expand time
-    N += random.randint(0,40)
+    N += random.randint(0,90)
     # Get sorted files
     files = glob(foldername + '/*.jpg')
     # Should remember this
