@@ -1,4 +1,5 @@
 import facebook
+import cv2
 import os
 import subprocess
 from fractions import Fraction
@@ -110,7 +111,23 @@ def take_photo(long = 0):
 	if not os.path.isdir(datestr):
 	    os.makedirs(datestr)
 	camera.capture(savename)
+
+        # Add clock for the timelapse experience
+        add_cock(savename)
+
     return picname
+
+# Add clock onto the image
+def add_cock(filepath):
+    img = cv2.imread(filepath)
+    print img.shape
+    x = 0
+    y = img.shape[0] - 16
+    timestr = time.strftime('%H:%M')
+    cv2.putText(img, timestr, (x,y),\
+                cv2.FONT_HERSHEY_SIMPLEX, 2, (0),\
+                thickness=8)
+    cv2.imwrite(filepath, img)
 
 def post_to_wall(picname, message):
     # Get facebook api
