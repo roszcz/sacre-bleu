@@ -15,15 +15,40 @@ def diffImg(t0, t1, t2):
     d2 = cv2.absdiff(t1, t0)
     return cv2.bitwise_and(d1, d2)
 
-def last_hour_plot(foldername, calculate = True,\
-                   plotname = 'movements.png',\
-                   N = 120):
-    # Randomly expand time
-    N += random.randint(0,90)
+def get_files(foldername):
     # Get sorted files
     files = glob(foldername + '/*.jpg')
     # Should remember this
     files.sort(key=os.path.getmtime)
+
+    return files;
+
+def make_diff_movie(foldername):
+
+    files = get_files(foldername)
+
+    for it in range(1,len(files)):
+	t0 = cv2.imread(files[it-1])
+	t1 = cv2.imread(files[it])
+	g0 = cv2.cvtColor(t0, cv2.COLOR_BGR2GRAY)
+	g1 = cv2.cvtColor(t1, cv2.COLOR_BGR2GRAY)
+	g0 = cv2.GaussianBlur(g0, (21, 21), 0)
+	g1 = cv2.GaussianBlur(g1, (21, 21), 0)
+	delta = cv2.absdiff(g0,g1)
+	thresh = cv2.threshold(delta, 25, 255, cv2.THRESH_BINARY)[1]
+	thresh = cv2.dilate(thresh, None, iterations=2)
+	cv2.imwrite('crap/' + files[it], thresh)
+	print it, files[it]
+
+
+
+def last_hour_plot(foldername, calculate = True,\
+                   plotname = 'movements.png',\
+                   N = 120):
+
+    files = get_files(foldername)
+    # Randomly expand time
+    N += random.randint(0,90)
 
     # Get file creation times for x-axis
     times = []

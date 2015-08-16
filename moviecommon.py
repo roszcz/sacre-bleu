@@ -35,11 +35,11 @@ def make_video(foldername):
 
 def push_video(foldername):
     # Hope those work great
-    arrange_images(foldername)
-    make_video(foldername)
+    #arrange_images(foldername)
+    #make_video(foldername)
 
     # Push to youtube
-    struct = time.strptime(foldername, '%Y_%m_%d')
+    #struct = time.strptime(foldername, '%Y_%m_%d')
     title = time.strftime('%Y %B %d in super slow motion')
     
     description = 'This video is a part of sacrebleu project:\n' +\
