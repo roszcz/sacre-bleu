@@ -3,6 +3,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib import dates
+from moviecommon import make_video
 import pickle
 import random
 import time
@@ -27,19 +28,31 @@ def make_diff_movie(foldername):
 
     files = get_files(foldername)
 
-    for it in range(1,len(files)):
+    for it in range(1,len(files)-1):
+	# Load gray imags
 	t0 = cv2.imread(files[it-1])
 	t1 = cv2.imread(files[it])
+	t2 = cv2.imread(files[it+1])
 	g0 = cv2.cvtColor(t0, cv2.COLOR_BGR2GRAY)
 	g1 = cv2.cvtColor(t1, cv2.COLOR_BGR2GRAY)
-	g0 = cv2.GaussianBlur(g0, (21, 21), 0)
-	g1 = cv2.GaussianBlur(g1, (21, 21), 0)
-	delta = cv2.absdiff(g0,g1)
-	thresh = cv2.threshold(delta, 25, 255, cv2.THRESH_BINARY)[1]
-	thresh = cv2.dilate(thresh, None, iterations=2)
-	cv2.imwrite('crap/' + files[it], thresh)
-	print it, files[it]
+	g2 = cv2.cvtColor(t2, cv2.COLOR_BGR2GRAY)
+	
+	# Perform image processing of some sort
+	if False:
+	    # Check out some numbers to get good cloud detection?
+	    g0 = cv2.GaussianBlur(g0, (21, 21), 0)
+	    g1 = cv2.GaussianBlur(g1, (21, 21), 0)
+	    delta = cv2.absdiff(g0,g1)
+	    thresh = cv2.threshold(delta, 25, 255, cv2.THRESH_BINARY)[1]
+	    thresh = cv2.dilate(thresh, None, iterations=2)
+	    cv2.imwrite('crap/' + files[it], thresh)
+	    print it, files[it]
+	if True:
+	    out = diffImg(g0,g1,g2)
+	    cv2.imwrite('crap/' + files[it], out)
+	    print it, files[it]
 
+    make_video('crap/' + foldername)
 
 
 def last_hour_plot(foldername, calculate = True,\

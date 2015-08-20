@@ -120,7 +120,7 @@ def take_photo(long = 0):
 # Add clock onto the image
 def add_cock(filepath):
     img = cv2.imread(filepath)
-    print img.shape
+    #print img.shape
     x = 0
     y = img.shape[0] - 16
     timestr = time.strftime('%H:%M')
