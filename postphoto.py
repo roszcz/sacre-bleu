@@ -30,13 +30,13 @@ if (struct.tm_min==20 and struct.tm_hour%3==1):
     post_to_album(picname, msg)
 
 # Post plot with recent movement detection
-if (struct.tm_min%20==2 and random() < 0.2):
+if (struct.tm_min%20==2 and random() < 0.05):
     plotname = last_hour_plot(dirname)
     post_to_wall(plotname, ' ')
     os.remove(plotname)
 
 # Make pretty histograms of popular colors 
-if (random() < 0.2 and struct.tm_min%20==13):
+if (random() < 0.05 and struct.tm_min%20==13):
     picpath = dirname + '/' + picname
     plotname = make_histogram(picpath)
     post_to_wall(plotname, ' ')

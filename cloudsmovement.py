@@ -57,11 +57,9 @@ def make_diff_movie(foldername):
 
 def last_hour_plot(foldername, calculate = True,\
                    plotname = 'movements.png',\
-                   N = 120):
+                   hour_only = True):
 
     files = get_files(foldername)
-    # Randomly expand time
-    N += random.randint(0,90)
 
     # Get file creation times for x-axis
     times = []
@@ -70,16 +68,21 @@ def last_hour_plot(foldername, calculate = True,\
         dtime = datetime.datetime.fromtimestamp(t)
         times.append(dtime)
 
-    # Cut files to last N files
-    files = files[-N:]
-    times = times[-N:]
+
+    if hour_only:
+	N = 120
+	# Randomly expand time
+	N += random.randint(0,90)
+	# Cut files to last N files
+	files = files[-N:]
+	times = times[-N:]
 
     # tic toc mechanism
     t = time.time()
 
     if calculate:
         movements = []
-        for it in range(1, N-1):
+        for it in range(1, len(files)-1):
             img0 = cv2.imread(files[it-1])
             gray0 = cv2.cvtColor(img0, cv2.COLOR_BGR2GRAY)
             img1 = cv2.imread(files[it])
@@ -123,12 +126,20 @@ def last_hour_plot(foldername, calculate = True,\
         plt.ylabel('action')
 
         # number of ticks?
-        formater = dates.DateFormatter('%H:%M')
-        hours = dates.HourLocator()
-        minutes = dates.MinuteLocator(interval = 15)
-        ax.xaxis.set_major_locator(minutes)
-        ax.xaxis.set_minor_locator(minutes)
-        ax.xaxis.set_major_formatter(formater)
+	if hour_only:
+	    formater = dates.DateFormatter('%H:%M')
+	    hours = dates.HourLocator()
+	    minutes = dates.MinuteLocator(interval = 15)
+	    ax.xaxis.set_major_locator(minutes)
+	    ax.xaxis.set_minor_locator(minutes)
+	    ax.xaxis.set_major_formatter(formater)
+	else:
+	    formater = dates.DateFormatter('%H')
+	    hours = dates.HourLocator(interval = 1)
+	    ax.xaxis.set_major_locator(hours)
+	    ax.xaxis.set_minor_locator(hours)
+	    ax.xaxis.set_major_formatter(formater)
+
         ax.tick_params(axis='x', which='both', bottom='off', top='off')
 
     #plt.show()

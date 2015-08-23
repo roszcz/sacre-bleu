@@ -164,7 +164,9 @@ def post_to_album(picname, message):
 		  message = message,\
 		  album_path = id + '/photos')
 
-def post_video(api, video_id, msg):
+def post_video(video_id, msg):
+    # Get facebook api
+    api = get_api()
     attachment =  {
 	    'name': 'Chmury',
 	    'link': 'https://www.youtube.com/watch?v=' + str(video_id),

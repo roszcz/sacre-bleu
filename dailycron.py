@@ -1,6 +1,7 @@
 #!/home/yo/.virtualenvs/sacrebleu/bin/python
-from sacrecommon import post_video, get_api
+from sacrecommon import post_video, post_to_wall
 from moviecommon import push_video
+from cloudsmovement import last_hour_plot
 import time
 import os
 
@@ -12,6 +13,9 @@ newest = max(dirs, key = os.path.getmtime)
 video_id = push_video(newest)
 
 # Publish with current date as a message
-api = get_api()
 message = '_' + time.strftime('%d %B %Y, %H:%M') 
-post_video(api, video_id, message)
+post_video(video_id, message)
+
+# Daily movements plot FIXME - time axis ticks
+plotname = last_hour_plot(newest, hour_only = False)
+post_to_wall(plotname, ' ')
