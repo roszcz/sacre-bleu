@@ -49,7 +49,7 @@ def brightness_plot(foldername, plotname = 'suntrace.png'):
 	    dupa = gc.collect()
 	    print int(time.time() - tic), '[s], files done:',\
 		  len(brightness),'/',len(files),\
-		  bright
+		  'brightness value:', bright
 
     # Save daily brightness, why not
     file = open('brightness.pickle', 'wb')
@@ -83,7 +83,7 @@ def brightness_plot(foldername, plotname = 'suntrace.png'):
 	plt.plot(times, brightness, clr)
 
 	plt.xlabel('time')
-	plt.ylabel('flux')
+	plt.ylabel('radiance')
 
         # number of ticks should depend on
 	# covered time span
@@ -143,6 +143,8 @@ def rgb_plot(foldername, plotname = 'rgbplot.png'):
 	plt.plot(times, R, 'r')
 	plt.plot(times, G, 'g')
 	plt.plot(times, B, 'b')
+
+	plt.legend(['Red', 'Green', 'Blue'], loc = 'upper left')
 
 	plt.xlabel('time')
 	plt.ylabel('saturation')

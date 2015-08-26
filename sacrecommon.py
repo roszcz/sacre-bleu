@@ -110,6 +110,11 @@ def take_photo(long = 0):
 	# Check dir existance
 	if not os.path.isdir(datestr):
 	    os.makedirs(datestr)
+
+	# FIXME - add ABW control
+	gains = (Fraction(383, 256), Fraction(41, 32))
+	camera.awb_mode = 'off'
+	camera.awb_gains = gains
 	camera.capture(savename)
 
         # Add clock for the timelapse experience
