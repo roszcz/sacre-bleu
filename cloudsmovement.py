@@ -89,11 +89,16 @@ def last_hour_plot(foldername, calculate = True,\
             gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
             img2 = cv2.imread(files[it+1])
             gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-            if (it%20==3):
-                print it, time.time() - t
-
+	    # Calculate something
             movimage = diffImg(img0, img1, img2)
-            movements.append(movimage.sum())
+	    score = movimage.sum()
+            movements.append(score)
+
+            if (it%20==3):
+		print int(time.time() - t), '[s], files done:',\
+		      len(movements),'/',len(files),\
+		      'movement value:', score 
+
     else:
         # FIXME - no saving mechanism
         file = open('move.pickle','rb')

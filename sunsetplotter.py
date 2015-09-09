@@ -118,7 +118,7 @@ def rgb_plot(foldername, plotname = 'rgbplot.png'):
 	R.append(img[:,:,2].sum())
 	G.append(img[:,:,1].sum())
 	B.append(img[:,:,0].sum())
-	if len(R)%50==5:
+	if len(R)%50==9:
 	    # Progress bar print
 	    print int(time.time() - tic), '[s], files done:',\
 		  len(R),'/',len(files)
@@ -135,7 +135,7 @@ def rgb_plot(foldername, plotname = 'rgbplot.png'):
 	plt.xticks([])
 	plt.yticks([])
 	miny = min([min(R), min(G), min(B)])
-	maxy = max([max(R), max(G), max(B)]) * 1.1
+	maxy = max([max(R), max(G), max(B)]) * 1.2
 	mean = (maxy + miny)/3
 	ax.set_ylim([miny, maxy])
 
@@ -148,6 +148,69 @@ def rgb_plot(foldername, plotname = 'rgbplot.png'):
 
 	plt.xlabel('time')
 	plt.ylabel('saturation')
+
+        # number of ticks should depend on
+	# covered time span
+        formater = dates.DateFormatter('%H')
+        hours = dates.HourLocator(interval = 1)
+        minutes = dates.MinuteLocator(interval = 15)
+        ax.xaxis.set_major_locator(hours)
+        ax.xaxis.set_minor_locator(hours)
+        ax.xaxis.set_major_formatter(formater)
+        ax.tick_params(axis='x', which='both', bottom='off', top='off')
+
+    fig.savefig(plotname)
+
+    return plotname
+
+def hsv_plot(foldername, plotname = 'hsvplot.png'):
+    files = get_files(foldername)
+    times = get_files_times(files)
+
+    # Tic Toc
+    tic = time.time()
+
+
+    # OpenCV reads each file in BGR!
+    H = []
+    S = []
+    V = []
+    for file in files:
+	img = cv2.imread(file)
+	img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+	V.append(img[:,:,2].sum())
+	S.append(img[:,:,1].sum())
+	H.append(img[:,:,0].sum())
+	if len(H)%50==9:
+	    # Progress bar print
+	    print int(time.time() - tic), '[s], files done:',\
+		  len(H),'/',len(files)
+	
+
+    with plt.xkcd():
+	# Based on "Stove Ownership" from XKCD by Randall Monroe
+	# http://xkcd.com/418/
+
+	fig = plt.figure()
+	ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+	ax.spines['right'].set_color('none')
+	ax.spines['top'].set_color('none')
+	plt.xticks([])
+	plt.yticks([])
+	miny = min([min(H), min(S), min(V)])
+	maxy = max([max(H), max(S), max(V)]) * 1.2
+	mean = (maxy + miny)/3
+	ax.set_ylim([miny, maxy])
+
+	
+	plt.plot(times, H, 'm')
+	plt.plot(times, S, 'c')
+	plt.plot(times, V, '#007071')
+
+	plt.legend(['Hue', 'Saturation', 'Value'], loc = 'upper right')
+
+	plt.xlabel('time')
+	plt.ylabel('arbitrary unit')
 
         # number of ticks should depend on
 	# covered time span
