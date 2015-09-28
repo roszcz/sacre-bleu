@@ -1,4 +1,5 @@
-#!/home/yo/.virtualenvs/sacrebleu/bin/python
+#!/usr/bin/python
+""" #!/home/yo/.virtualenvs/sacrebleu/bin/python """
 import time
 from random import random
 import os

@@ -1,4 +1,5 @@
-#!/home/yo/.virtualenvs/sacrebleu/bin/python
+#!/usr/bin/python
+""" !/home/yo/.virtualenvs/sacrebleu/bin/python """
 from sacrecommon import post_video, post_to_wall
 from moviecommon import push_video, render_video
 from cloudsmovement import last_hour_plot
