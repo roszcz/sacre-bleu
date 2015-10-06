@@ -21,8 +21,8 @@ def make_video(foldername):
     # Takes date / folder and creates a mpg 
     moviename = foldername
 
-    # Settings
-    framerate = 15 
+    # Settings FIXME - why is this hardcoded here, bitch
+    framerate = 20
     
     # Dunno how to make the movie smoother?
     # Must provide a full path to ffmpeg or cron bash won't know
