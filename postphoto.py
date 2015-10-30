@@ -15,9 +15,7 @@ if len(sys.argv) > 1:
     long_exposure = 8 
 
 # Take 2 photos trick - control framerate as well
-_wait = 17
-take_photo(long_exposure)
-time.sleep(_wait)
+_wait = 27
 take_photo(long_exposure)
 time.sleep(_wait)
 picname = take_photo(long_exposure)
@@ -49,13 +47,13 @@ if (random() < 0.04 and struct.tm_min%40==13):
     os.remove(plotname)
 
 # Post plot with sunrise rgb
-if (struct.tm_hour == 7 and struct.tm_min == 19):
+if (struct.tm_hour == 7 and struct.tm_min == 13):
     plotname = rgb_plot(dirname)
     post_to_wall(plotname, 'wschod')
     os.remove(plotname)
 
 # Post plot with sunrise hsv
-if (struct.tm_hour == 7 and struct.tm_min == 25):
+if (struct.tm_hour == 7 and struct.tm_min == 15):
     plotname = hsv_plot(dirname)
     post_to_wall(plotname, ' ')
     os.remove(plotname)

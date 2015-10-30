@@ -173,7 +173,7 @@ def post_video(video_id, msg):
     # Get facebook api
     api = get_api()
     attachment =  {
-	    'name': 'Chmury',
+	    'name': 'Chmury?',
 	    'link': 'https://www.youtube.com/watch?v=' + str(video_id),
 	    'caption': 'fully automatic time-lapse generator',
 	    'description': 'film wygenerowany automatycznie',

@@ -1,3 +1,4 @@
+tags
 *.secret
 *.swp
 *.pyc
@@ -7,4 +8,4 @@
 *.mpg
 *.log
 *.png
-
+*.pickle

@@ -22,7 +22,7 @@ def make_video(foldername):
     moviename = foldername
 
     # Settings FIXME - why is this hardcoded here, bitch
-    framerate = 20
+    framerate = 15
     
     # Dunno how to make the movie smoother?
     # Must provide a full path to ffmpeg or cron bash won't know
