@@ -14,9 +14,23 @@ _c_hour   = _current_time.tm_hour
 
 # Set exposure time (0 - automatic)
 _exposure_time = 0
-pic_a = take_photo(_exposure_time)
-time.sleep(27)
-pic_b = take_photo(_exposure_time)
+_pic_time_distance = 27
+
+# Set number of photos taken per minute
+_sampling_rate = 2
+
+# Container for pic names
+picnames = []
+
+# Photoshoot
+for it in range(_sampling_rate):
+    # Don't wait before the first picture
+    if it is not 0:
+	time.sleep(_pic_time_distance)
+
+    # click
+    picnames.append(take_photo(_exposure_time))
+
 
 # Begin cronjobish definitions
 if (_c_hour == 4 and _c_minute == 20)
