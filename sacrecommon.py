@@ -120,7 +120,7 @@ def take_photo(long = 0):
         # Add clock for the timelapse experience
         add_cock(savename)
 
-    return picname
+    return picname, savename
 
 # Add clock onto the image
 def add_cock(filepath):
@@ -144,12 +144,14 @@ def post_to_wall(picname, message):
                   message = message)
 
 
-def post_to_album(picname, message):
+def post_to_album(picInfo, message):
     # Get facebook api
     api = get_api()
+
     # Date names directories
+    picname = picInfo[0]
+    picpath = picInfo[1]
     datestr = picname[0:10]
-    picpath = datestr + '/' + picname
 
     # Get desired album id
     id = get_album_id(api, picname)
