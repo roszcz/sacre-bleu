@@ -101,13 +101,14 @@ def brightness_plot(foldername, plotname = 'suntrace.png'):
 
 
 
-def rgb_plot(foldername, plotname = 'rgbplot.png'):
+def rgb_plot(foldername):
+    # Timestamped name
+    plotname = foldername + '.png'
     files = get_files(foldername)
     times = get_files_times(files)
 
     # Tic Toc
     tic = time.time()
-
 
     # OpenCV reads each file in BGR!
     R = []

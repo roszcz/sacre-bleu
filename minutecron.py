@@ -53,6 +53,8 @@ if _pic_post_hours.count((_c_hour, _c_minute)) is not 0:
 # Post sunrise photos
 _sunrise_hour = (6,0)
 
+# TODO this will be replaced by live data acquisition
+# instead of calculating everything just before posting
 if _sunrise_hour[0] == _c_hour:
     # Plot some time after actual sunrise
     if _sunrise_hour[1] == _c_minute + 30:
