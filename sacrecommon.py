@@ -5,13 +5,14 @@ import subprocess
 from fractions import Fraction
 import time
 import picamera
+import settings as s
 
 def get_secrets(filenames):
 	with open(filenames[0], 'r') as myfile:
 		token = myfile.read().replace('\n','')
 
 	with open(filenames[1], 'r') as idfile:
-	    page_id = idfile.read().replace('\n','')
+            page_id = idfile.read().replace('\n','')
 
 	return token, page_id
 
@@ -24,8 +25,8 @@ def get_api():
     page_access_token = None
     for page in resp['data']:
 	if page['id'] == cfg['page_id']:
-	    page_access_token = page['access_token']
-	    graph = facebook.GraphAPI(page_access_token, version='2.4')
+            page_access_token = page['access_token']
+            graph = facebook.GraphAPI(page_access_token, version='2.4')
     return graph
 # You can also skip the above if you get a page token:
 #http://stackoverflow.com/questions/8231877/facebook-access-token-for-pages
@@ -34,10 +35,10 @@ def get_api():
 def make_cfg():
     token, pageid = get_secrets(['token.secret', 'pageid.secret'])
     cfg = {
-	    'page_id' : '119890141687062',
-	    'access_token' : token
-	    }
-    
+            'page_id' : '119890141687062',
+            'access_token' : token
+            }
+
     return cfg
 
 def get_album_id(api, picname):
@@ -89,8 +90,8 @@ def take_photo(long = 0):
     resolution = full_hd
 
     # Date string confusion
-    datestr = time.strftime('%Y_%m_%d')
-    hourstr = time.strftime('%H%M%S')
+    datestr = time.strftime(s.YMD_FORMAT)
+    hourstr = time.strftime(s.HMS_FORMAT)
     picname = datestr + '__' + hourstr + '.jpg'
 
     # Picture taking
@@ -99,9 +100,9 @@ def take_photo(long = 0):
 
 	# Long exposure is possible
 	if long is not 0:
-	    camera.framerate = Fraction(1,6)
-	    camera.shutter_speed = long * 1000000 
-	    camera.exposure_mode = 'off'
+            camera.framerate = Fraction(1,6)
+            camera.shutter_speed = long * 1000000
+            camera.exposure_mode = 'off'
 	camera.start_preview()
 	# Camera warm up
 	time.sleep(2)

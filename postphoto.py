@@ -12,7 +12,7 @@ from sunsetplotter import hsv_plot
 
 long_exposure = 0
 if len(sys.argv) > 1:
-    long_exposure = 8 
+    long_exposure = 8
 
 # Take 2 photos trick - control framerate as well
 _wait = 27
