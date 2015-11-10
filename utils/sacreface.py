@@ -1,5 +1,4 @@
 """ All facebook related methods are in this file """
-
 import settings as s
 import facebook
 
@@ -55,24 +54,26 @@ def get_album_id(api, foldername):
 
     # Iterate through albums untill the proper one is found
     # TODO some better search mechanism might be desired
-    id = None
+    ID = None
     for bum in albums:
 	#print bum['name']
 	if album_name in bum['name']:
-            id = bum['id']
+            ID = bum['id']
 
     # Create album is nothing were found
-    if id is None:
+    if ID is None:
 	resp = api.put_object(parent_object = 'me',\
                               connection_name = 'albums',\
                               message = 'Album',\
                               name = album_name)
-	id = resp['id']
+	ID = resp['id']
 
-    return id
+    return ID
 
 # Provide full path to the picture you want to upload
-def post_to_wall(picpath, message):
+def post_to_wall(pic, message):
+    # Construct full picture path
+    picpath = pic[1] + '/' + pic[0]
     # Get facebook api
     api = get_api()
 
@@ -81,18 +82,18 @@ def post_to_wall(picpath, message):
     api.put_photo(image = open(picpath),\
                   message = message)
 
-# TODO - refactor this a lot
+# Detects date (YMD) of the photo and posts it
+# into an aproporiate album
 def post_to_album(picInfo, message):
     # Get facebook api
     api = get_api()
 
     # Date names directories
-    picname = picInfo[0]
-    picpath = picInfo[1]
-    datestr = picname[0:10]
+    foldername = picInfo[1]
+    picpath = picInfo[1] + '/' + picInfo[0]
 
-    # Get desired album id
-    id = get_album_id(api, picname)
+    # Get desired album ID
+    ID = get_album_id(api, foldername)
 
     # Add clock information to post message
     cock = picname[12:18]
@@ -102,10 +103,7 @@ def post_to_album(picInfo, message):
     # Extend message with clock info
     message = message + '\n\n\n' + clock_msg
 
-    # and ip
-#    ipinfo = subprocess.check_output('ifconfig |grep inet', shell=True)
- #   message = message + '\n\n\n' + ipinfo
+    # Post to album
     api.put_photo(image = open(picpath),\
-		  message = message,\
-		  album_path = id + '/photos')
-
+                  message = message,\
+                  album_path = ID + '/photos')

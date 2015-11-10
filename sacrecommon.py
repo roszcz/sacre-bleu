@@ -93,6 +93,7 @@ def take_photo(long = 0):
     datestr = time.strftime(s.YMD_FORMAT)
     hourstr = time.strftime(s.HMS_FORMAT)
     picname = datestr + '__' + hourstr + '.jpg'
+    savepath= datestr
 
     # Picture taking
     with picamera.PiCamera() as camera:
@@ -106,11 +107,11 @@ def take_photo(long = 0):
 	camera.start_preview()
 	# Camera warm up
 	time.sleep(2)
-	savename = datestr + '/' + picname
+	savename = savepath + '/' + picname
 
 	# Check dir existance
-	if not os.path.isdir(datestr):
-	    os.makedirs(datestr)
+	if not os.path.isdir(savepath):
+            os.makedirs(savepath)
 
 	# FIXME - add ABW control
 	gains = (Fraction(383, 256), Fraction(41, 32))
@@ -121,7 +122,7 @@ def take_photo(long = 0):
         # Add clock for the timelapse experience
         add_cock(savename)
 
-    return picname, savename
+    return picname, savepath
 
 # Add clock onto the image
 def add_cock(filepath):

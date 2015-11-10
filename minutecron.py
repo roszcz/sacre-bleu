@@ -16,7 +16,7 @@ if not _DEBUG:
 _sampling_rate = 2
 
 if _DEBUG:
-    # Overload tak photo to read pictures from a directory
+    # Overload this method to read pictures from a directory
     def take_photos(exposure):
         files = glob.glob('imgs/*.jpg')
         pictures = []
