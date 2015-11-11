@@ -13,6 +13,7 @@ def take_photos(howmany = 1, exposure = 0):
     pictures = []
     for it in range(howmany):
         pictures.append(take_photo(exposure))
+        time.sleep(1)
 
     return pictures
 
@@ -40,6 +41,10 @@ def take_photo(long = 0):
 
     # Renormalize
     random_picture *= 256
+
+    # Add some trace information
+    print 'Fake photo in:', savename
+    print 'With shape:', random_picture.shape
 
     # Save to disk
     cv2.imwrite(savename, random_picture)
