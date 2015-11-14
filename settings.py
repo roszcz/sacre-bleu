@@ -5,3 +5,10 @@ YMD_FORMAT = '%Y_%m_%d'
 
 # Hour Minute Second
 HMS_FORMAT = '%H%M%S'
+
+# Database settables
+COLUMNS = ['red', 'green', 'blue',
+           'hue', 'saturation', 'value',
+           'movement']
+
+DBFILE = 'db.h5'

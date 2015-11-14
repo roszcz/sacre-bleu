@@ -1,45 +1,67 @@
 """ This should be visible only as db.update_base(key, val)? """
-import tables
+import numpy as np
+import pandas as pd
+from datetime import datetime as dt
+import os
 import settings as s
 
-# For every photo we define a set of data called a Particle
-class Particle(tables.IsDescription):
-    # Beacause timestamping is crap in pytables 
-    # we'll do custom timestamp -> string serialization
-    #timestamp = tables.Time64Col()
-    # Date should be in table meta-data?
-    date_YMD = tables.StringCol(8)
-    time_HMS = tables.StringCol(6)
-    red      = tables.UInt32Col()
-    green    = tables.UInt32Col()
-    blue     = tables.UInt32Col()
+# Struct for basic data, TODO - come up with advanced data
+class BasicData(object):
+    def __init__(self, timestamp):
+        # Pandas table is indexed with time of measurement
+        self.timestamp = timestamp
 
-# The name of our HDF5 filename
-filename = "zupa.h5"
+        # Some crap pseudo data that can 
+        # be easily extracted from picamera pictures
+        self.red = 0
+        self.green = 0
+        self.blue = 0
+        self.hue = 0
+        self.saturation = 0
+        self.value = 0
 
-print("Creating file:", filename)
+        # Barely more advanced data
+        self.movement = 0
 
-# Open a file in "w"rite mode
-h5file = tables.open_file(filename, mode="a", title="Test file")
+    # Set of setters
+    def set_rgb(self, rgb):
+        self.red = rgb[0]
+        self.green = rgb[1]
+        self.blue = rgb[2]
 
-# Create a new group under "/" (root)
-group = h5file.create_group("/", 'detector', 'Detector information')
-group2 = h5file.create_group("/detector", 'dupector', 'Detector information')
-print("Group '/detector' created")
+    def set_hsv(self, hsv):
+        self.hue = hsv[0]
+        self.saturation = hsv[1]
+        self.value = hsv[2]
 
-# Create one table on it
-table = h5file.create_table(group, 'readout', Particle, "Readout example")
-print("Table '/detector/readout' created")
+    def set_movement(self, movement):
+        self.movement = movement
 
-table2 = h5file.create_table(group2, 'dupadupa', Particle, 'duuupa')
+    def save(self):
+        store = get_base()
+        datadict = self.__dict__
+        now = datadict.pop('timestamp')
+        df = pd.DataFrame(data=datadict, index=[now])
+        store['sacredata'] = store['sacredata'].append(df)
+        print 'dupa'
+        store.close()
 
-p1 = table.row
-p2 = table2.row
-for it in range(10):
-    p1['date_YMD'] = str(it**it)
-    p1['red'] = it
-    p2['blue'] = 1./(1 + it)
-    p1.append()
-    p2.append()
-table.flush()
-table2.flush()
+def get_base():
+    # Everything is set in the settings module
+    filename = s.DBFILE
+
+    if os.path.isfile(filename):
+        # Open existing file and append
+        store = pd.HDFStore(filename, 'a')
+    else:
+        # Initialize pandas dataframe with all zeros first row
+        columns = s.COLUMNS
+        df = pd.DataFrame(np.zeros([1,len(columns)]),
+                          index = [pd.to_datetime(dt.now())],
+                          columns = columns)
+        # Create db file
+        store = pd.HDFStore(filename)
+        store['sacredata'] = df
+
+    # Call store.close() after using this?
+    return store

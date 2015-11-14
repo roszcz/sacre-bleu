@@ -64,10 +64,16 @@ def analyze_picture(pic):
     time = datetime.datetime.fromtimestamp(t)
     img = cv2.imread(fullpath)
 
+    # Create db container
+    data = BasicData()
+    data.set_rgb(anal.rgb_distribution(img))
+    data.set_hsv(anal.hsv_distribution(img))
+    data.set_movement(anal.find_movement(pic))
+
     # FIXME arrange some pytables here
-    print 'RGB:', anal.rgb_distribution(img)
-    print 'HSV:', anal.hsv_distribution(img)
-    print 'Movement:', anal.find_movement(pic)
+    print 'RGB:', data.red, data.green, data.blue
+    print 'HSV:', data.hue, data.saturation, data.value
+    print 'Movement:', data.movement
 
     # Updating the database
     if _c_day is 0:
