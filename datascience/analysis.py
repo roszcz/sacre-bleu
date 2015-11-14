@@ -31,6 +31,7 @@ def find_movement(pic):
     files = uc.get_files(pic[1])
 
     # Get file index in the directory
+    # WTF with the \\ instead of / ?
     idx = files.index(pic[1] + '\\' + pic[0])
 
     # There must be more than 2 files to perform
