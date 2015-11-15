@@ -41,6 +41,8 @@ def take_photo(long = 0):
 
     # Renormalize
     random_picture *= 256
+    # This not work
+    # random_picture = cv2.cvtColor(random_picture, cv2.COLOR_HSV2BGR)
 
     # Add some trace information
     print 'Fake photo in:', savename

@@ -9,14 +9,18 @@ import utils.common as uc
 # reading files from disk too often
 def rgb_distribution(img):
     # RGB spectroscopy
-    b, g, r = np.sum(np.sum(img, axis=0), axis=0)
+    # Normalize per pixel
+    norm = img.shape[0] * img.shape[1]
+    b, g, r = 1.0*np.sum(np.sum(img, axis=0), axis=0)/norm
 
     return r, g, b
 
 # FIXME - those are not distributions!!!
 def hsv_distribution(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    h, s, v = np.sum(np.sum(hsv, axis=0), axis=0)
+    # Normalize per pixel
+    norm = img.shape[0] * img.shape[1]
+    h, s, v = 1.0*np.sum(np.sum(hsv, axis=0), axis=0)/norm
 
     return h, s, v
 
@@ -51,6 +55,9 @@ def find_movement(pic):
 
         diff = three_img_diff(gr0, gr1, gr2)
 
-        score = diff.sum()
+        # Normalize per pixel
+        norm = im0.shape[0] * im0.shape[1]
+
+        score = 1.0 * diff.sum()/norm
 
     return score

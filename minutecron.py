@@ -10,7 +10,10 @@ import pickledb
 import glob
 import numpy as np
 import settings as s
+from datetime import datetime as dt
+from datastorage import databasing as dbb
 from datascience import analysis as anal # trolololo
+
 
 # Modules like picamera make sense only on rpi
 # and for developement purposes we emulate them here
@@ -65,10 +68,11 @@ def analyze_picture(pic):
     img = cv2.imread(fullpath)
 
     # Create db container
-    data = BasicData()
+    data = dbb.SacreData(dt.now())
     data.set_rgb(anal.rgb_distribution(img))
     data.set_hsv(anal.hsv_distribution(img))
     data.set_movement(anal.find_movement(pic))
+    data.save()
 
     # FIXME arrange some pytables here
     print 'RGB:', data.red, data.green, data.blue
@@ -81,11 +85,13 @@ def analyze_picture(pic):
 
 if __name__ == '__main__':
     # Container for pic names [0] - picname, [1] - picpath (just dir)
-    pictures = take_photos(3)
+    pictures = take_photos(25)
 
     # Perform a shitload of datascience
     for pic in pictures:
         analyze_picture(pic)
+
+    # TODO Plotting and posting must be done here
 
     # Begin cronjobish definitions
     if not _DEBUG:

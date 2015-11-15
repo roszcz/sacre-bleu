@@ -6,7 +6,7 @@ import os
 import settings as s
 
 # Struct for basic data, TODO - come up with advanced data
-class BasicData(object):
+class SacreData(object):
     def __init__(self, timestamp):
         # Pandas table is indexed with time of measurement
         self.timestamp = timestamp
@@ -39,12 +39,24 @@ class BasicData(object):
 
     def save(self):
         store = get_base()
+        # This seems pretty low on style
         datadict = self.__dict__
         now = datadict.pop('timestamp')
         df = pd.DataFrame(data=datadict, index=[now])
         store['sacredata'] = store['sacredata'].append(df)
-        print 'dupa'
         store.close()
+
+def get_data(column, start, stop):
+    # Start and stop must be datetime strings?
+    # returns totally plotable lists
+    base = get_base()
+    sacredata = base['sacredata']
+
+    serie = sacredata.loc[start:stop, column]
+
+    # Convert from pd.Series to t, y(t) vectors
+    return serie.index.tolist(), serie.values
+
 
 def get_base():
     # Everything is set in the settings module

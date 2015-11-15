@@ -6,6 +6,10 @@ import cv2
 def take_photos(howmany = 1, exposure = 0):
     pictures = []
     for it in range(howmany):
+        # Pictures must be distributed evenly within each minute
+        if it is not 0:
+            time.sleep(60/howmany)
+
         # [0] - filename, [1] - filepath
         pictures.append(take_photo(exposure))
 
