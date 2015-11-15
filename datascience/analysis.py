@@ -15,7 +15,7 @@ def rgb_distribution(img):
 
     return r, g, b
 
-# FIXME - those are not distributions!!!
+# FIXME - those are not distributions!!! or are they
 def hsv_distribution(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     # Normalize per pixel

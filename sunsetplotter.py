@@ -140,7 +140,6 @@ def rgb_plot(foldername):
 	mean = (maxy + miny)/3
 	ax.set_ylim([miny, maxy])
 
-	
 	plt.plot(times, R, 'r')
 	plt.plot(times, G, 'g')
 	plt.plot(times, B, 'b')
@@ -203,7 +202,6 @@ def hsv_plot(foldername, plotname = 'hsvplot.png'):
 	mean = (maxy + miny)/3
 	ax.set_ylim([miny, maxy])
 
-	
 	plt.plot(times, H, 'm')
 	plt.plot(times, S, 'c')
 	plt.plot(times, V, '#007071')

@@ -5,6 +5,11 @@ from datetime import datetime as dt
 import os
 import settings as s
 
+""" 'sacredata' holds information acquired for every picture
+    In the nearby future we might want to add more tables
+    in the database for values calculated once per day or
+    per week or whatnot """
+
 # Struct for basic data, TODO - come up with advanced data
 class SacreData(object):
     def __init__(self, timestamp):
@@ -46,7 +51,7 @@ class SacreData(object):
         store['sacredata'] = store['sacredata'].append(df)
         store.close()
 
-def get_data(column, start, stop):
+def get_minute_data(column, start, stop):
     # Start and stop must be datetime strings?
     # returns totally plotable lists
     base = get_base()
@@ -57,6 +62,13 @@ def get_data(column, start, stop):
     # Convert from pd.Series to t, y(t) vectors
     return serie.index.tolist(), serie.values
 
+# TODO this is for the future
+def get_daily_data(column, start, stop):
+    # For now there is no such DataFrame,
+    # But there might be for example with
+    # estimated sunrise hours etc.
+    base = get_base()
+    dailydata = base['dailydata']
 
 def get_base():
     # Everything is set in the settings module

@@ -10,10 +10,10 @@ import pickledb
 import glob
 import numpy as np
 import settings as s
+import blotters.plotters as plt
 from datetime import datetime as dt
 from datastorage import databasing as dbb
 from datascience import analysis as anal # trolololo
-
 
 # Modules like picamera make sense only on rpi
 # and for developement purposes we emulate them here
@@ -23,7 +23,7 @@ else:
     from debug.camerableu import take_photos
 
 # Set number of photos taken per minute
-_sampling_rate = 2
+_sampling_rate = 1
 
 # Prepare time markers
 _current_time = time.localtime()
@@ -50,14 +50,11 @@ _pic_post_hours = [(4,20),
                    (16,20),
                    (19,20)]
 
-# Post sunrise photos
+# Post sunrise photos - this is time of plot,
+# so consider some offset
 _sunrise_hour = (6,0)
 
-# TODO make this dependent of calendar info
-_db_file = 'db.pickle'
-def update_database(key, value):
-    print key, value
-
+# TODO should this migrate to the anal?
 def analyze_picture(pic):
     # pic[0] = picname, pic[1] = picpath
     # Get time from os.timestamp (easier than from filename)
@@ -83,15 +80,38 @@ def analyze_picture(pic):
     if _c_day is 0:
         print 'wtf'
 
+def plot_plots():
+    base = dbb.get_base()
+    sd = base['sacredata']
+
+    # Get desired time-span
+    end = dt.now()
+    # Let's say sunrise takes 2h
+    start = end - datetime.timedelta(hours=2)
+
+    # Convert to strings recognazible by pandas
+    starts = start.strftime('%x %X')
+    ends = end.strftime('%x %X')
+    # Load from the database
+    rgb_series = sd.loc[starts:ends, ['red', 'green', 'blue']]
+    print rgb_series
+    # Convert from pandas format
+    rgb_time = rgb_series.index
+    rgb_vals = rgb_series.values
+
+    base.close()
+    print plt.make_rgb_plot(rgb_time, rgb_vals)
+
 if __name__ == '__main__':
     # Container for pic names [0] - picname, [1] - picpath (just dir)
-    pictures = take_photos(25)
+    pictures = take_photos(_sampling_rate)
 
     # Perform a shitload of datascience
     for pic in pictures:
         analyze_picture(pic)
 
     # TODO Plotting and posting must be done here
+    plot_plots()
 
     # Begin cronjobish definitions
     if not _DEBUG:
