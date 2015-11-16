@@ -11,6 +11,7 @@ import glob
 import numpy as np
 import settings as s
 import blotters.plotters as plt
+from utils import common as uc
 from datetime import datetime as dt
 from datastorage import databasing as dbb
 from datascience import analysis as anal # trolololo
@@ -23,7 +24,7 @@ else:
     from debug.camerableu import take_photos
 
 # Set number of photos taken per minute
-_sampling_rate = 1
+_sampling_rate = 2
 
 # Prepare time markers
 _current_time = time.localtime()
@@ -52,20 +53,19 @@ _pic_post_hours = [(4,20),
 
 # Post sunrise photos - this is time of plot,
 # so consider some offset
-_sunrise_hour = (6,0)
+_sunrise_hour = (6, 20)
 
+# This function is run multiple times during this script
 # TODO should this migrate to the anal?
 def analyze_picture(pic):
     # pic[0] = picname, pic[1] = picpath
-    # Get time from os.timestamp (easier than from filename)
-    # calc values
+    # Read picture as np.array of BGR
     fullpath = pic[1] + '/' + pic[0]
-    t = os.path.getmtime(fullpath)
-    time = datetime.datetime.fromtimestamp(t)
     img = cv2.imread(fullpath)
 
-    # Create db container
-    data = dbb.SacreData(dt.now())
+    # Create db container FIXME - timestamp must be read from picname
+    time = dt.strptime(pic[0], s.TIME_FORMAT)
+    data = dbb.SacreData(time)
     data.set_rgb(anal.rgb_distribution(img))
     data.set_hsv(anal.hsv_distribution(img))
     data.set_movement(anal.find_movement(pic))
@@ -76,13 +76,21 @@ def analyze_picture(pic):
     print 'HSV:', data.hue, data.saturation, data.value
     print 'Movement:', data.movement
 
-    # Updating the database
+    # weekly analysis?
     if _c_day is 0:
-        print 'wtf'
+        print 'wtf', uc.fname()
 
+# This is run once per minute
 def plot_plots():
     base = dbb.get_base()
     sd = base['sacredata']
+
+    # TODO implement this with posting to fb and cleaning files
+    # if it_is time_to_post_sunrise:
+    #   post_sunrise()
+
+    # if it_is _time_to_post_daily_brightness:
+    #   post_dialy_brightness()
 
     # Get desired time-span
     end = dt.now()
@@ -93,14 +101,26 @@ def plot_plots():
     starts = start.strftime('%x %X')
     ends = end.strftime('%x %X')
     # Load from the database
-    rgb_series = sd.loc[starts:ends, ['red', 'green', 'blue']]
+    rgb_series = sd.loc[starts:ends, ['hue', 'saturation', 'value']]
     print rgb_series
     # Convert from pandas format
     rgb_time = rgb_series.index
     rgb_vals = rgb_series.values
 
+    # Create plot and print filename
+    print plt.make_hsv_plot(rgb_time, rgb_vals)
+
+    # Try brightness plot
+    # Starts at dawn (it's enough for pandas loc[] method)
+    starts = start.strftime('%x')
+
+    bright_series = sd.loc[starts, 'value']
+    bright_time = bright_series.index
+    bright_vals = bright_series.values
+
+    print plt.make_brightness_plot(bright_time, bright_vals)
+
     base.close()
-    print plt.make_rgb_plot(rgb_time, rgb_vals)
 
 if __name__ == '__main__':
     # Container for pic names [0] - picname, [1] - picpath (just dir)

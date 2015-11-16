@@ -9,7 +9,7 @@ class Plot(object):
         self.times = times
         self.data = data
         self.savename = 'plot.png'
-        self.ylabel = 'values'
+        self.ylabel = 'VALUES'
         # In case You forget
         self.legend = ''
         self.colors = ['r', 'g', 'b']
@@ -30,7 +30,7 @@ class Plot(object):
         if hours < 1:
             # Shortest possible in the time domain
             formater = '%M'
-            major = dates.MinuteLocator(interval = 15)
+            major = dates.MinuteLocator(interval = 10)
             minor = dates.MinuteLocator(interval = 3)
         elif hours < 3:
             formater = '%H:%M'
@@ -42,7 +42,7 @@ class Plot(object):
             minor = dates.HourLocator(interval = 1)
         elif hours < 20:
             formater = '%H'
-            major = dates.HourLocator(interval = 4)
+            major = dates.HourLocator(interval = 2)
             minor = dates.HourLocator(interval = 1)
         else:
             formater = '%H'
@@ -103,13 +103,14 @@ class Plot(object):
                 plt.legend(self.legend, loc = 'upper left')
 
             # Label the labels
-            plt.xlabel('time\n(is an illusion)')
+            plt.xlabel('TIME')
             plt.ylabel(self.ylabel)
 
             # number of ticks should depend on
             # covered time span
             ax.xaxis.set_major_locator(self.major_formatter)
             ax.xaxis.set_minor_locator(self.minor_formatter)
+            # TODO minor_formatter might also look cool
             ax.xaxis.set_major_formatter(self.formater)
             ax.tick_params(axis='x', which='both', bottom='off', top='off')
             ax.tick_params(axis='y', which='both',
@@ -120,11 +121,33 @@ class Plot(object):
 
 def make_rgb_plot(times, vals):
     # Name the output
-    filename = 'dupa222.png'
+    filename = 'rgb.png'
     plot = Plot(times, vals)
     plot.set_colors(['r', 'g', 'b'])
     plot.set_legend(['Red', 'Green', 'Blue'])
-    plot.set_ylabel('value per pixel')
+    plot.set_ylabel('VALUE\nPER PIXEL')
+
+    plot.make_figure(filename)
+
+    return filename
+
+def make_hsv_plot(times, vals):
+    # Name the output
+    filename = 'hsv.png'
+    plot = Plot(times, vals)
+    plot.set_colors(['m', 'c', '#007071'])
+    plot.set_legend(['Hue', 'Saturation', 'Value'])
+    plot.set_ylabel('VALUE\nPER PIXEL')
+
+    plot.make_figure(filename)
+
+    return filename
+
+def make_brightness_plot(times, vals):
+    filename = 'brighness.png'
+    plot = Plot(times, vals)
+    plot.set_legend('Brightness')
+    plot.set_ylabel('VALUE\nPER PIXEL')
 
     plot.make_figure(filename)
 
