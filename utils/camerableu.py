@@ -4,6 +4,7 @@ import settings as s
 import cv2
 
 def take_photos(howmany = 1, exposure = 0):
+    """ Wrapper for taking multiple photos at one cron-run"""
     pictures = []
     for it in range(howmany):
         # Pictures must be distributed evenly within each minute
@@ -16,6 +17,9 @@ def take_photos(howmany = 1, exposure = 0):
     return pictures
 
 def take_photo(long = 0):
+    """ Takes a picture, resolution and exposure can be controlled
+        returns picpath and picname
+    """
 
     # Possible resolutions
     low_hd = (1280, 720)
@@ -60,8 +64,8 @@ def take_photo(long = 0):
 
     return picname, savepath
 
-# Add clock onto the image
 def add_cock(filepath):
+    """ Print clock on the image for better timelapse experience """
     img = cv2.imread(filepath)
     #print img.shape
     x = 0

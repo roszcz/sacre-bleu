@@ -3,6 +3,7 @@ import os
 import inspect
 
 def get_files(foldername):
+    """ Get pictures sorted by harddrive time """
     # Get sorted files
     files = glob(foldername + '/*.jpg')
     # Should remember this
@@ -10,6 +11,6 @@ def get_files(foldername):
 
     return files;
 
-# Imitate cpp's __func__
 def fname():
+    """ Imitates cpp's __func__ """
     return inspect.stack()[1][3]

@@ -46,7 +46,7 @@ class Plot(object):
             minor = dates.HourLocator(interval = 1)
         else:
             formater = '%H'
-            major = dates.HourLocator(interval = 4)
+            major = dates.HourLocator(interval = 1)
             minor = dates.HourLocator(interval = 1)
 
         self.formater = dates.DateFormatter(formater)
@@ -120,7 +120,7 @@ class Plot(object):
         fig.savefig(filename)
 
 def make_rgb_plot(times, vals):
-    # Name the output
+    """ Takes data and returns filename """
     filename = 'rgb.png'
     plot = Plot(times, vals)
     plot.set_colors(['r', 'g', 'b'])
@@ -132,7 +132,7 @@ def make_rgb_plot(times, vals):
     return filename
 
 def make_hsv_plot(times, vals):
-    # Name the output
+    """ this is proper folding comment for method description """
     filename = 'hsv.png'
     plot = Plot(times, vals)
     plot.set_colors(['m', 'c', '#007071'])
@@ -144,6 +144,7 @@ def make_hsv_plot(times, vals):
     return filename
 
 def make_brightness_plot(times, vals):
+    """ Takes data and returns a filename """
     filename = 'brighness.png'
     plot = Plot(times, vals)
     plot.set_legend('Brightness')

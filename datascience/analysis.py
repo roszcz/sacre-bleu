@@ -8,7 +8,7 @@ import utils.common as uc
 # Every function should take cv2.image to avoid 
 # reading files from disk too often
 def rgb_distribution(img):
-    # RGB spectroscopy
+    """ RGB spectroscopy """
     # Normalize per pixel
     norm = img.shape[0] * img.shape[1]
     b, g, r = 1.0*np.sum(np.sum(img, axis=0), axis=0)/norm
@@ -17,6 +17,7 @@ def rgb_distribution(img):
 
 # FIXME - those are not distributions!!! or are they
 def hsv_distribution(img):
+    """ hsv """
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     # Normalize per pixel
     norm = img.shape[0] * img.shape[1]
@@ -25,12 +26,13 @@ def hsv_distribution(img):
     return h, s, v
 
 def three_img_diff(t0, t1, t2):
+    """ This is used for movement detection """
     d1 = cv2.absdiff(t2, t1)
     d2 = cv2.absdiff(t1, t0)
     return cv2.bitwise_and(d1, d2)
 
-
 def find_movement(pic):
+    """ Movement detection, crap """
     # Get sorted files
     files = uc.get_files(pic[1])
 

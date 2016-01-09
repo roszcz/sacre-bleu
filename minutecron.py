@@ -58,6 +58,7 @@ _sunrise_hour = (6, 20)
 # This function is run multiple times during this script
 # TODO should this migrate to the anal?
 def analyze_picture(pic):
+    """ Perform anal and update base """
     # pic[0] = picname, pic[1] = picpath
     # Read picture as np.array of BGR
     fullpath = pic[1] + '/' + pic[0]
@@ -76,50 +77,58 @@ def analyze_picture(pic):
     print 'HSV:', data.hue, data.saturation, data.value
     print 'Movement:', data.movement
 
-    # weekly analysis?
+    # weekly analysis? (0 - monday)
     if _c_day is 0:
         print 'wtf', uc.fname()
 
 # This is run once per minute
 def plot_plots():
+    post_sunrise_rgb()
+    post_daily_brightness()
+
+def post_sunrise_rgb():
+    """ fold descriptor """
     base = dbb.get_base()
     sd = base['sacredata']
-
-    # TODO implement this with posting to fb and cleaning files
-    # if it_is time_to_post_sunrise:
-    #   post_sunrise()
-
-    # if it_is _time_to_post_daily_brightness:
-    #   post_dialy_brightness()
-
     # Get desired time-span
     end = dt.now()
-    # Let's say sunrise takes 2h
+    # Let's say sunrise begun 2h ago
     start = end - datetime.timedelta(hours=2)
 
     # Convert to strings recognazible by pandas
     starts = start.strftime('%x %X')
     ends = end.strftime('%x %X')
     # Load from the database
-    rgb_series = sd.loc[starts:ends, ['hue', 'saturation', 'value']]
+    rgb_series = sd.loc[starts:ends, ['red', 'green', 'blue']]
     print rgb_series
     # Convert from pandas format
     rgb_time = rgb_series.index
     rgb_vals = rgb_series.values
 
-    # Create plot and print filename
-    print plt.make_hsv_plot(rgb_time, rgb_vals)
+    # TODO Implement this - new fb storing model
+    # should be designed, allowing for easier
+    # history plots and videos browsing
+    print uc.fname(),\
+          'fake posting a picture:',\
+          plt.make_rgb_plot(rgb_time, rgb_vals)
+    print 'deleting will be here also'
+    base.close()
 
-    # Try brightness plot
-    # Starts at dawn (it's enough for pandas loc[] method)
-    starts = start.strftime('%x')
+def post_daily_brightness():
+    """ Dawn to dusk plot of total radiance on the pictures """
+    base = dbb.get_base()
+    sd = base['sacredata']
+
+    # Get today as a pandas locator
+    starts = dt.now().strftime('%x')
 
     bright_series = sd.loc[starts, 'value']
     bright_time = bright_series.index
     bright_vals = bright_series.values
 
-    print plt.make_brightness_plot(bright_time, bright_vals)
-
+    print uc.fname(),\
+          'fake posting a plot:',\
+          plt.make_brightness_plot(bright_time, bright_vals)
     base.close()
 
 if __name__ == '__main__':

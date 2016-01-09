@@ -13,7 +13,7 @@ def get_base():
         columns = ['red', 'green', 'blue',
                    'hue', 'saturation', 'value',
                    'movement']
-        df = pd.DataFrame(np.zeros([1,len(columns)]),
+        df = pd.DataFrame(np.zeros([1, len(columns)]),
                           index = [pd.to_datetime(dt.now())],
                           columns = columns)
         # Create db file

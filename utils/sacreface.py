@@ -2,8 +2,8 @@
 import settings as s
 import facebook
 
-# Secrets are used for facebook api authentication
 def get_secrets(filenames):
+    """ Secrets are used for facebook api authentication """
 	with open(filenames[0], 'r') as myfile:
 		token = myfile.read().replace('\n','')
 
@@ -12,8 +12,8 @@ def get_secrets(filenames):
 
 	return token, page_id
 
-# Config object is used in python facebook module
 def make_cfg():
+    """ Config object is used in python facebook module """
     token, pageid = get_secrets(['token.secret', 'pageid.secret'])
     cfg = {
             'page_id' : '119890141687062',
@@ -22,8 +22,9 @@ def make_cfg():
 
     return cfg
 
-# Get python access to facebook api 
+# 
 def get_api():
+    """ Get python access to facebook api """
     cfg = make_cfg()
     graph = facebook.GraphAPI(cfg['access_token'], version='2.4')
     #  Get page token to post as the page. You can skip
@@ -36,12 +37,14 @@ def get_api():
             graph = facebook.GraphAPI(page_access_token, version='2.4')
     return graph
 # You can also skip the above if you get a page token:
-#http://stackoverflow.com/questions/8231877/facebook-access-token-for-pages
+# http://stackoverflow.com/questions/8231877/facebook-access-token-for-pages
 # and make that long-lived token as in Step 3
 
-# Get an ID of a facebook album for a given date
-# or create it if it doesnt exist
+# 
+# 
 def get_album_id(api, foldername):
+    """ Get an ID of a facebook album for a given date 
+        or create it if it doesnt exist """
     # foldername must be named with current date
     # following the YMD_FORMAT defined in settings
     date = foldername
@@ -70,8 +73,9 @@ def get_album_id(api, foldername):
 
     return ID
 
-# Provide full path to the picture you want to upload
+# 
 def post_to_wall(pic, message):
+    """ Provide full path to the picture you want to upload """
     # Construct full picture path
     picpath = pic[1] + '/' + pic[0]
     # Get facebook api
@@ -82,9 +86,10 @@ def post_to_wall(pic, message):
     api.put_photo(image = open(picpath),\
                   message = message)
 
-# Detects date (YMD) of the photo and posts it
-# into an aproporiate album
 def post_to_album(picInfo, message):
+    """ Detects date (YMD) of the photo and posts it
+        into an aproporiate album
+    """
     # Get facebook api
     api = get_api()
 
