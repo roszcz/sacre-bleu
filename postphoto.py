@@ -40,20 +40,20 @@ if (struct.tm_min%30==2 and random() < 0.05):
     os.remove(plotname)
 
 # Make pretty histograms of popular colors 
-if (random() < 0.04 and struct.tm_min%40==13):
+if (random() < 0.004 and struct.tm_min%40==13):
     picpath = dirname + '/' + picname
     plotname = make_histogram(picpath)
     post_to_wall(plotname, ' ')
     os.remove(plotname)
 
 # Post plot with sunrise rgb
-if (struct.tm_hour == 7 and struct.tm_min == 13):
+if (struct.tm_hour == 7 and struct.tm_min == 33):
     plotname = rgb_plot(dirname)
     post_to_wall(plotname, 'wschod')
     os.remove(plotname)
 
 # Post plot with sunrise hsv
-if (struct.tm_hour == 7 and struct.tm_min == 15):
+if (struct.tm_hour == 7 and struct.tm_min == 35):
     plotname = hsv_plot(dirname)
     post_to_wall(plotname, ' ')
     os.remove(plotname)
