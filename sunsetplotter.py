@@ -144,7 +144,7 @@ def rgb_plot(foldername, plotname = 'rgbplot.png'):
 	plt.plot(times, G, 'g')
 	plt.plot(times, B, 'b')
 
-	plt.legend(['Red', 'Green', 'Blue'], loc = 'upper left')
+	plt.legend(['Blue', 'Red', 'Green'], loc = 'upper left')
 
 	plt.xlabel('time')
 	plt.ylabel('saturation')
