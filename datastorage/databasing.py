@@ -12,7 +12,9 @@ import settings as s
 
 # Struct for basic data, TODO - come up with advanced data
 class SacreData(object):
+    """ One row of data """
     def __init__(self, timestamp):
+        """ Construct """
         # Pandas table is indexed with time of measurement
         self.timestamp = timestamp
 
@@ -28,21 +30,24 @@ class SacreData(object):
         # Barely more advanced data
         self.movement = 0
 
-    # Set of setters
     def set_rgb(self, rgb):
+        """ rgb """
         self.red = rgb[0]
         self.green = rgb[1]
         self.blue = rgb[2]
 
     def set_hsv(self, hsv):
+        """ hsv """
         self.hue = hsv[0]
         self.saturation = hsv[1]
         self.value = hsv[2]
 
     def set_movement(self, movement):
+        """ movement """
         self.movement = movement
 
     def save(self):
+        """ Saves """
         store = get_base()
         # This seems pretty low on style
         datadict = self.__dict__
@@ -52,6 +57,7 @@ class SacreData(object):
         store.close()
 
 def get_minute_data(column, start, stop):
+    """ Get some data with minutes resolution """
     # Start and stop must be datetime strings?
     # returns totally plotable lists
     base = get_base()
@@ -64,6 +70,7 @@ def get_minute_data(column, start, stop):
 
 # TODO this is for the future
 def get_daily_data(column, start, stop):
+    """ """
     # For now there is no such DataFrame,
     # But there might be for example with
     # estimated sunrise hours etc.
@@ -71,6 +78,7 @@ def get_daily_data(column, start, stop):
     dailydata = base['dailydata']
 
 def get_base():
+    """ Get pandas DataFrame from file """
     # Everything is set in the settings module
     filename = s.DBFILE
 

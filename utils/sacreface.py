@@ -40,8 +40,6 @@ def get_api():
 # http://stackoverflow.com/questions/8231877/facebook-access-token-for-pages
 # and make that long-lived token as in Step 3
 
-# 
-# 
 def get_album_id(api, foldername):
     """ Get an ID of a facebook album for a given date 
         or create it if it doesnt exist """

@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 from matplotlib import dates
 
 class Plot(object):
+    """ SacrePlot object """
     def __init__(self, times, data):
+        """ Constructor """
         self.times = times
         self.data = data
         self.savename = 'plot.png'
@@ -18,6 +20,7 @@ class Plot(object):
         self.init_date_formatter()
 
     def init_date_formatter(self):
+        """ Create timely axis information """
         # Divide cleverly
         # Get datetime.timedelta duration:
         timed = self.times[-1] - self.times[0]
@@ -54,15 +57,19 @@ class Plot(object):
         self.minor_formatter = minor
 
     def set_ylabel(self, label):
+        """ """
         self.ylabel = label
 
     def set_legend(self, legend):
+        """ """
         self.legend = legend
 
     def set_colors(self, colors):
+        """ """
         self.colors = colors
 
     def make_figure(self, filename):
+        """ Makes pretty xkcd style plot """
         with plt.xkcd():
             # This is common for all 2d plots
             fig = plt.figure()
@@ -132,7 +139,7 @@ def make_rgb_plot(times, vals):
     return filename
 
 def make_hsv_plot(times, vals):
-    """ this is proper folding comment for method description """
+    """ Writes file from data and returns filename """
     filename = 'hsv.png'
     plot = Plot(times, vals)
     plot.set_colors(['m', 'c', '#007071'])

@@ -9,7 +9,7 @@ import cv2
 import pickledb
 import glob
 import numpy as np
-import settings as s
+import settings as st
 import blotters.plotters as plt
 from utils import common as uc
 from datetime import datetime as dt
@@ -23,9 +23,6 @@ if not _DEBUG:
 else:
     from debug.camerableu import take_photos
 
-# Set number of photos taken per minute
-_sampling_rate = 2
-
 # Prepare time markers
 _current_time = time.localtime()
 _c_minute = _current_time.tm_min
@@ -33,23 +30,7 @@ _c_hour   = _current_time.tm_hour
 _c_day    = _current_time.tm_wday
 
 # Today's directory
-_dirname = time.strftime(s.YMD_FORMAT, _current_time)
-
-# Begin with taking 2 photos
-# TODO - some different mechanism will be
-# required for live monitoring
-
-# Set exposure time (0 - automatic)
-_exposure_time = 0
-_pic_time_distance = 27
-
-# Prepare hours to post photo
-_pic_post_hours = [(4,20),
-                   (7,20),
-                   (10,20),
-                   (13,20),
-                   (16,20),
-                   (19,20)]
+_dirname = time.strftime(st.YMD_FORMAT, _current_time)
 
 # Post sunrise photos - this is time of plot,
 # so consider some offset
@@ -65,7 +46,7 @@ def analyze_picture(pic):
     img = cv2.imread(fullpath)
 
     # Create db container FIXME - timestamp must be read from picname
-    time = dt.strptime(pic[0], s.TIME_FORMAT)
+    time = dt.strptime(pic[0], st.TIME_FORMAT)
     data = dbb.SacreData(time)
     data.set_rgb(anal.rgb_distribution(img))
     data.set_hsv(anal.hsv_distribution(img))
@@ -87,7 +68,7 @@ def plot_plots():
     post_daily_brightness()
 
 def post_sunrise_rgb():
-    """ fold descriptor """
+    """ Fold descriptor """
     base = dbb.get_base()
     sd = base['sacredata']
     # Get desired time-span
@@ -131,9 +112,10 @@ def post_daily_brightness():
           plt.make_brightness_plot(bright_time, bright_vals)
     base.close()
 
-if __name__ == '__main__':
+def main():
+    """ This happens regularry """
     # Container for pic names [0] - picname, [1] - picpath (just dir)
-    pictures = take_photos(_sampling_rate)
+    pictures = take_photos(st._sampling_rate)
 
     # Perform a shitload of datascience
     for pic in pictures:
@@ -145,5 +127,24 @@ if __name__ == '__main__':
     # Begin cronjobish definitions
     if not _DEBUG:
         # Maybe post picture
-        if _pic_post_hours.count((_c_hour, _c_minute)) is not 0:
+        if st._pic_post_hours.count((_c_hour, _c_minute)) is not 0:
+            print 'fake posting in progress'
+
+if __name__ == '__main__':
+    """ RUNME """
+    main()
+    # Container for pic names [0] - picname, [1] - picpath (just dir)
+    pictures = take_photos(st._sampling_rate)
+
+    # Perform a shitload of datascience
+    for pic in pictures:
+        analyze_picture(pic)
+
+    # TODO Plotting and posting must be done here
+    plot_plots()
+
+    # Begin cronjobish definitions
+    if not _DEBUG:
+        # Maybe post picture
+        if st._pic_post_hours.count((_c_hour, _c_minute)) is not 0:
             print 'fake posting in progress'

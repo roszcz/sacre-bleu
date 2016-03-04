@@ -3,6 +3,7 @@ from datetime import datetime as dt
 import os
 
 def get_base():
+    """ This is supposed to initialize the database file """
     filename = 'db.h5'
 
     if os.path.isfile(filename):
