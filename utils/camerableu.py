@@ -1,6 +1,7 @@
 import time
 import cv2
 from utils import settings as us
+from utils import common as uc
 
 if us.is_debug():
     from utils import fakecam as cam
@@ -15,7 +16,12 @@ def take_photos(howmany = 1, exposure = 0):
         if it is not 0:
             time.sleep(60/howmany)
 
-        savepath = us.picture_path() + '/{}.png'.format(it)
+        # 0-based number for picture in the pictures directory
+        img_number = len(uc.get_files(us.picture_path()))
+
+        # This get rid of sorting problems nicely
+        numname = str(1000000 + img_number)
+        savepath = us.picture_path() + '/{}.jpg'.format(it)
         # Write pictures
         cam.take_photo(savepath)
 

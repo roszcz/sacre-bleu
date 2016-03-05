@@ -18,12 +18,8 @@ def picture_path():
     cfg = load_cfg()
     return cfg['img_path']
 
-def minutely_jobs():
+def minute_actions():
     """ Read jobs scheduled for any minute """
-    pass
-
-def get_actions():
-    """ Find out what actions are to be performed right now """
     # Get current timestamp
     now = dt.now()
 
@@ -34,7 +30,7 @@ def get_actions():
     actions = []
 
     # Check if now is in the range for every-minute action
-    minutely = cfg['minutely']
+    minutely = cfg['minute']
     start = minutely['start']
     # Convert to a dt.timestamp within the same day as *now*
     start = dt.strptime(start, '%H:%M')
@@ -46,5 +42,39 @@ def get_actions():
 
     if start < now < stop:
         actions += minutely['actions']
+
+    return actions
+
+def daily_actions():
+    """ Same for once per day actions """
+    # Get current timestamp
+    now = dt.now()
+
+    # Load configuration
+    cfg = load_cfg()
+
+    # Prepare container for actions
+    actions = []
+
+    # Check if now is in the range for every-minute action
+    daily = cfg['daily']
+
+    for event in daily:
+        when = daily[event]['when']
+        when = dt.strptime(when, '%H:%M')
+        when = now.replace(hour = when.hour, minute = when.minute)
+
+        if when == now:
+            actions += daily[event]['actions']
+            print actions
+
+    return actions
+
+def get_actions():
+    """ Find out what actions are to be performed right now """
+    actions = []
+
+    actions += minute_actions()
+    actions += daily_actions()
 
     return actions
