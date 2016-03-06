@@ -94,3 +94,4 @@ def get_base():
 
     # Call store.close() after using this?
     return store
+

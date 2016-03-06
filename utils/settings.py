@@ -13,6 +13,12 @@ def is_debug():
     out = 'DEBUG' in cfg['mode']
     return out
 
+def is_facebook():
+    """ Checker """
+    cfg = load_cfg()
+    out = 'YES' in cfg['facebook']
+    return out
+
 def db_path():
     """ Database file path """
     cfg = load_cfg()

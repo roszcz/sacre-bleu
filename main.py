@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from utils import camerableu as cam
 from utils import settings as us
 from utils import jobs as uj
@@ -18,6 +19,9 @@ def perform_action(action):
     if 'MAKE_ISING' in action:
         print 'making ising'
         uj.iterate_ising()
+    if 'POST_ISING_PIC' in action:
+        print 'posting ising pic'
+        uj.post_ising_pic()
 
 def main():
     """ This is run every minute for proper sacrebleuing """

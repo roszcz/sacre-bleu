@@ -1,14 +1,17 @@
-from utils import camerableu as uc
+from utils import camerableu as cam
+from utils import common as uc
 from utils import settings as us
+from community import posters as cp
 from datascience import ising as di
 from datastorage import databasing as db
 from datetime import datetime as dt
+import random
 from glob import glob
 import os
 
 def take_pictures():
     """ Just that """
-    uc.take_photos(2)
+    cam.take_photos(2)
 
 def clean_up():
     """ Delete everything from the day """
@@ -38,3 +41,11 @@ def iterate_ising():
     # Take 4 steps
     for _ in range(4):
         Ising.run()
+
+def post_ising_pic():
+    """ Put random ising picture on the facebook wall! """
+    # Get path to random picture
+    paths = uc.get_jpgs(us.ising_path())
+    path = random.choice(paths)
+
+    cp.post_on_wall(path, 'hello')
