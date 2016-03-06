@@ -13,6 +13,12 @@ def is_debug():
     out = 'DEBUG' in cfg['mode']
     return out
 
+def is_youtube():
+    """ Checker """
+    cfg = load_cfg()
+    out = 'YES' in cfg['youtube']
+    return out
+
 def is_facebook():
     """ Checker """
     cfg = load_cfg()

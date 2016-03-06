@@ -49,3 +49,15 @@ def post_ising_pic():
     path = random.choice(paths)
 
     cp.post_on_wall(path)
+
+def post_ising_vid():
+    """ Create timelapse, post to yt, post link on facebook """
+    # Attachment facebook info:
+    att = {
+            'name' : 'Ising stress test',
+            'caption' : 'fully automatic',
+            'description' : 'metropolis simulation'
+    }
+
+    cp.post_timelapse(us.ising_path(), att)
+

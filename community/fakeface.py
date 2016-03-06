@@ -8,3 +8,8 @@ def post_to_album(picpath, bumname, message):
     print 'Trying to upload picture', picpath
     print 'To album:', bumname
     print 'With message:', message
+
+def attach_to_wall(attachment, message = ''):
+    """ More """
+    print 'Trying ot attach:', attachment
+    print 'With message:', message

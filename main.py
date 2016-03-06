@@ -22,6 +22,10 @@ def perform_action(action):
     if 'POST_ISING_PIC' in action:
         print 'posting ising pic'
 	uj.post_ising_pic()
+    if 'POST_ISING_VID' in action:
+        print 'posting ising vid'
+        uj.post_ising_vid()
+
 
 def main():
     """ This is run every minute for proper sacrebleuing """
