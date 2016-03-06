@@ -9,7 +9,7 @@ class PersistentIsing(object):
     def __init__(self):
         """ Constructor """
         self.SIZE = 1000
-        self.T = 0.5
+        self.T = 1.5
         self.path = 'data/ising.pickle'
 
     def bc(self, i):
@@ -45,7 +45,7 @@ class PersistentIsing(object):
         """ The Main monte carlo loop """
         system = self.get_sytem()
 
-        for _ in range(11595):
+        for _ in range(21595):
             M = np.random.randint(0,self.SIZE)
             N = np.random.randint(0,self.SIZE)
 

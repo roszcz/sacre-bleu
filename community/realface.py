@@ -67,11 +67,11 @@ def get_album_id(album_name):
 
     return ID
 
-def attach_to_wall(attachement, message = ''):
+def attach_to_wall(attachment, message = ''):
     """ Post with attachement, e.g. youtube video """
     api = get_api()
 
-    api.put_wall_post(message = msg, attachment = attachment)
+    api.put_wall_post(message = message, attachment = attachment)
 
 def post_to_wall(picpath, message):
     """ Provide full path to the picture you want to upload """

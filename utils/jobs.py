@@ -39,7 +39,7 @@ def iterate_ising():
     """ This is a stress test """
     Ising = di.PersistentIsing()
     # Take 4 steps
-    for _ in range(4):
+    for _ in range(2):
         Ising.run()
 
 def post_ising_pic():

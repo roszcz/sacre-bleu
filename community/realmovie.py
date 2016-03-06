@@ -16,7 +16,7 @@ def make_video_on_yt(foldername):
     # Must provide a full path to ffmpeg or cron bash won't know
     # Where to find it? 
     command = '/usr/local/bin/ffmpeg -framerate ' + str(framerate) + ' '\
-            '-i ' + foldername + '/movieme100%04d.jpg '\
+            '-i ' + foldername + '/100%04d.jpg '\
             '-c:v libx264 -r 30 '\
             '-pix_fmt yuv420p ' + moviename
     sp.call(command, shell=True)
