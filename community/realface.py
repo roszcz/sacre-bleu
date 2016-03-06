@@ -5,13 +5,13 @@ import os
 
 def get_secrets(filenames):
     """ Secrets are used for facebook api authentication """
-	with open(filenames[0], 'r') as myfile:
-		token = myfile.read().replace('\n','')
+    with open(filenames[0], 'r') as myfile:
+	token = myfile.read().replace('\n','')
 
-	with open(filenames[1], 'r') as idfile:
-            page_id = idfile.read().replace('\n','')
+    with open(filenames[1], 'r') as idfile:
+	page_id = idfile.read().replace('\n','')
 
-	return token, page_id
+    return token, page_id
 
 def make_cfg():
     """ Config object is used in python facebook module """
@@ -72,6 +72,11 @@ def post_to_wall(picpath, message):
     # Get facebook api
     api = get_api()
 
+    # Add clock information to post message
+    when = dt.fromtimestamp(os.path.getctime(picpath))
+    clock_msg = when.strftime('%X')
+    message += '\n\n\n' + clock_msg
+
     # Pictures posted to wall are held at the main dir
     # FIXME - add some dir structure
     api.put_photo(image = open(picpath),\
@@ -89,9 +94,7 @@ def post_to_album(picpath, album_name, message):
 
     # Add clock information to post message
     when = dt.fromtimestamp(os.path.getctime(picpath))
-    clock_msg = when.strftime('%c')
-
-    # Extend message with clock info
+    clock_msg = when.strftime('%X')
     message += '\n\n\n' + clock_msg
 
     # Post to album

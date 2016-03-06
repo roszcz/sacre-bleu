@@ -48,4 +48,4 @@ def post_ising_pic():
     paths = uc.get_jpgs(us.ising_path())
     path = random.choice(paths)
 
-    cp.post_on_wall(path, 'hello')
+    cp.post_on_wall(path)
