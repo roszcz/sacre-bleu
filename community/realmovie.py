@@ -2,7 +2,7 @@ import glob
 import time
 import subprocess as sp
 import os
-from upload_video import upload_video
+from utils import upload_video as uv
 
 def make_video_on_yt(foldername):
     """ Creates mpg file and uploads to youtube """
@@ -41,7 +41,7 @@ def push_video(moviepath):
             'privacyStatus' : privacyStatus\
             }
 
-    ID = upload_video(details)
+    ID = uv.upload_video(details)
 
     return ID
 
