@@ -2,7 +2,7 @@ from glob import glob
 import os
 import inspect
 
-def get_files(foldername):
+def get_jpgs(foldername):
     """ Get pictures sorted by harddrive time """
     # Get sorted files
     files = glob(foldername + '/*.jpg')

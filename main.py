@@ -5,11 +5,19 @@ from utils import jobs as uj
 def perform_action(action):
     """ Specialized cronish scheduler for sacrebleu """
     if 'TAKE_PICTURES' in action:
+        print 'taking pictures'
         uj.take_pictures()
     if 'PERFORM_ANAL' in action:
         print 'anal now'
+        uj.perform_anal()
     if 'POST_PLOTS' in action:
         print 'post'
+    if 'CLEAN_UP' in action:
+        print 'cleaning'
+        uj.clean_up()
+    if 'MAKE_ISING' in action:
+        print 'making ising'
+        uj.iterate_ising()
 
 def main():
     """ This is run every minute for proper sacrebleuing """

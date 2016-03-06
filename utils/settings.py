@@ -13,10 +13,25 @@ def is_debug():
     out = 'DEBUG' in cfg['mode']
     return out
 
+def db_path():
+    """ Database file path """
+    cfg = load_cfg()
+    return cfg['db_file']
+
+def ising_path():
+    """ Where ising snapshots are held """
+    cfg = load_cfg()
+    return cfg['ising_img']
+
 def picture_path():
     """ """
     cfg = load_cfg()
     return cfg['img_path']
+
+def plot_path():
+    """ """
+    cfg = load_cfg()
+    return cfg['plot_path']
 
 def minute_actions():
     """ Read jobs scheduled for any minute """

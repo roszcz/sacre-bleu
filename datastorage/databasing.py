@@ -2,15 +2,9 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime as dt
+from utils import settings as us
 import os
-import settings as s
 
-""" 'sacredata' holds information acquired for every picture
-    In the nearby future we might want to add more tables
-    in the database for values calculated once per day or
-    per week or whatnot """
-
-# Struct for basic data, TODO - come up with advanced data
 class SacreData(object):
     """ One row of data """
     def __init__(self, timestamp):
@@ -80,14 +74,17 @@ def get_daily_data(column, start, stop):
 def get_base():
     """ Get pandas DataFrame from file """
     # Everything is set in the settings module
-    filename = s.DBFILE
+    filename = us.db_path()
 
     if os.path.isfile(filename):
         # Open existing file and append
         store = pd.HDFStore(filename, 'a')
     else:
         # Initialize pandas dataframe with all zeros first row
-        columns = s.COLUMNS
+        # FIXME we need dynamic database, yo
+        columns = ['red', 'green', 'blue',
+                   'hue', 'saturation', 'value',
+                   'movement']
         df = pd.DataFrame(np.zeros([1,len(columns)]),
                           index = [pd.to_datetime(dt.now())],
                           columns = columns)

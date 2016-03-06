@@ -17,11 +17,12 @@ def take_photos(howmany = 1, exposure = 0):
             time.sleep(60/howmany)
 
         # 0-based number for picture in the pictures directory
-        img_number = len(uc.get_files(us.picture_path()))
+        img_number = len(uc.get_jpgs(us.picture_path()))
 
         # This get rid of sorting problems nicely
         numname = str(1000000 + img_number)
-        savepath = us.picture_path() + '/{}.jpg'.format(it)
+        savepath = us.picture_path() + '/{}.jpg'.format(numname)
+        print savepath
         # Write pictures
         cam.take_photo(savepath)
 
