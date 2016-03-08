@@ -8,25 +8,19 @@ class PersistentIsing(object):
     """ Class encapsulating this code I googled """
     def __init__(self):
         """ Constructor """
-        self.SIZE = 1000
-        self.T = 1.5
+        self.size_y = 72 * 3
+        self.size_x = 128 * 3
+        self.T = 2.1
         self.path = 'data/ising.pickle'
-
-    def bc(self, i):
-        """ Check periodic boundary conditions  """
-        if i+1 > self.SIZE-1:
-            return 0
-        if i-1 < 0:
-            return self.SIZE-1
-        else:
-            return i
 
     def energy(self, system, N, M):
         """ Calculate internal energy """
-        return -1 * system[N,M] * (system[self.bc(N-1), M] \
-                                   + system[self.bc(N+1), M] \
-                                   + system[N, self.bc(M-1)] \
-                                   + system[N, self.bc(M+1)])
+        next_N = N % self.size_y
+        next_M = M % self.size_x
+        return -1 * system[N,M] * (system[N-1, M] \
+                                   + system[next_N, M] \
+                                   + system[N, M-1] \
+                                   + system[N, next_M])
 
     def get_sytem(self):
         """ Or load """
@@ -36,7 +30,8 @@ class PersistentIsing(object):
                 system = pickle.load(fin)
         else:
             # Initialization
-            system = np.random.random_integers(0,1,(self.SIZE,self.SIZE))
+            sizeyx = (self.size_y, self.size_x)
+            system = np.random.random_integers(0, 1, sizeyx)
             system[system==0] =- 1
 
         return system
@@ -45,9 +40,9 @@ class PersistentIsing(object):
         """ The Main monte carlo loop """
         system = self.get_sytem()
 
-        for _ in range(21595):
-            M = np.random.randint(0,self.SIZE)
-            N = np.random.randint(0,self.SIZE)
+        for _ in range(1000):
+            M = np.random.randint(0, self.size_x)
+            N = np.random.randint(0, self.size_y)
 
             E = -2. * self.energy(system, N, M)
 
