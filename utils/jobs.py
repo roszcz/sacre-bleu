@@ -24,6 +24,15 @@ def clean_up():
             if os.path.isfile(file):
                 os.remove(file)
 
+    # TODO remake this so you have to specify all paths to clear
+    # Clean mpg file
+    moviepath = 'img/ising.mpg'
+    os.remove(moviepath)
+
+    # Ising pickle file
+    picklepath = 'data/ising.pickle'
+    os.remove(picklepath)
+
 def perform_anal():
     """ Regularly, save results in the database """
     # Clear microseconds

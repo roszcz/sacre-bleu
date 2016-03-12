@@ -10,7 +10,7 @@ class PersistentIsing(object):
         """ Constructor """
         self.size_y = 72 * 3
         self.size_x = 128 * 3
-        self.T = 2.1
+        self.T = 1.1
         self.path = 'data/ising.pickle'
 
     def energy(self, system, N, M):

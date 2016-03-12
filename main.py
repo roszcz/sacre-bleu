@@ -26,7 +26,6 @@ def perform_action(action):
         print 'posting ising vid'
         uj.post_ising_vid()
 
-
 def main():
     """ This is run every minute for proper sacrebleuing """
     actions = us.get_actions()
