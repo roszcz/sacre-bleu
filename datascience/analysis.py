@@ -1,6 +1,8 @@
 """ Analyze analyze analyze
     Decision about updateing the database
     must be done within live running methods """
+from datetime import datetime as dt
+from datastorage import databasing as db
 import numpy as np
 import cv2
 import utils.common as uc
@@ -15,7 +17,6 @@ def rgb_distribution(img):
 
     return r, g, b
 
-# FIXME - those are not distributions!!! or are they
 def hsv_distribution(img):
     """ hsv """
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -63,3 +64,17 @@ def find_movement(pic):
         score = 1.0 * diff.sum()/norm
 
     return score
+
+def perform_anal(pictures):
+    """ Regularly, save results in the database """
+    # Clear microseconds
+    for pic in pictures:
+        img = cv2.imread(pic)
+        now = dt.now()
+        data = db.SacreData(now)
+        data.set_rgb(rgb_distribution(img))
+        data.set_hsv(hsv_distribution(img))
+        data.set_movement(666)
+        data.save()
+    print 'done anal'
+

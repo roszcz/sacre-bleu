@@ -3,15 +3,18 @@ from utils import common as uc
 from utils import settings as us
 from community import posters as cp
 from datascience import ising as di
-from datastorage import databasing as db
+from datascience import analysis as da
+from datascience import plotters as dp
 from datetime import datetime as dt
 import random
 from glob import glob
 import os
 
+# FIXME this needs a new name
 def take_pictures():
     """ Just that """
-    cam.take_photos(2)
+    pictures = cam.take_photos(2)
+    da.perform_anal(pictures)
 
 def clean_up():
     """ Delete everything from the day """
@@ -32,17 +35,6 @@ def clean_up():
     # Ising pickle file
     picklepath = 'data/ising.pickle'
     os.remove(picklepath)
-
-def perform_anal():
-    """ Regularly, save results in the database """
-    # Clear microseconds
-    now = dt.now()
-    data = db.SacreData(now)
-    data.set_rgb([1,2,3])
-    data.set_hsv([6,6,6])
-    data.set_movement(123)
-    data.save()
-    print 'done anal'
 
 def iterate_ising():
     """ This is a stress test """
@@ -70,3 +62,7 @@ def post_ising_vid():
 
     cp.post_timelapse(us.ising_path(), att)
 
+def post_sunrise_rgb():
+    """ Simple rgb plot from last few hours """
+    plotpath = dp.last_five_hours_rgb()
+    os.remove(plotpath)
