@@ -58,17 +58,19 @@ def minute_actions():
 
     # Check if now is in the range for every-minute action
     minutely = cfg['minute']
-    start = minutely['start']
-    # Convert to a dt.timestamp within the same day as *now*
-    start = dt.strptime(start, '%H:%M')
-    start = now.replace(hour = start.hour, minute = start.minute)
 
-    stop = minutely['stop']
-    stop = dt.strptime(stop, '%H:%M')
-    stop = now.replace(hour = stop.hour, minute = stop.minute)
+    for event in minutely:
+        start = minutely[event]['start']
+        # Convert to a dt.timestamp within the same day as *now*
+        start = dt.strptime(start, '%H:%M')
+        start = now.replace(hour = start.hour, minute = start.minute)
 
-    if start < now < stop:
-        actions += minutely['actions']
+        stop = minutely[event]['stop']
+        stop = dt.strptime(stop, '%H:%M')
+        stop = now.replace(hour = stop.hour, minute = stop.minute)
+
+        if start < now < stop:
+            actions += minutely[event]['actions']
 
     return actions
 
