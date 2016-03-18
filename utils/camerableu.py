@@ -23,11 +23,14 @@ def take_photos(howmany = 1, exposure = 0):
         numname = str(1000000 + img_number)
         savepath = us.picture_path() + '/{}.jpg'.format(numname)
         print savepath
+
         # Write pictures
-        cam.take_photo(savepath)
+        cam.take_photo(savepath, long = exposure)
 
         # Return filenames
         pictures.append(savepath)
+
+	print 'pic taken'
 
     return pictures
 

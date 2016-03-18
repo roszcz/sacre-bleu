@@ -14,7 +14,7 @@ import os
 # FIXME this needs a new name
 def take_pictures():
     """ Just that """
-    pictures = cam.take_photos(2)
+    pictures = cam.take_photos(2, 0)
     da.perform_anal(pictures)
 
 def clean_up():
@@ -75,7 +75,7 @@ def post_sunrise_rgb():
     res = client.query('sunrise in Krakow Polska')
 
     # Parse sunrise hour string
-    msg = 'sunrise prediction: ' + ' '.join(res.pods[1].text.split()[0:2])
+    msg = 'sunrise time estimate: ' + ' '.join(res.pods[1].text.split()[0:2])
 
     # Post on facebook!
     cp.post_on_wall(plotpath, msg)

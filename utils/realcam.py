@@ -1,5 +1,7 @@
 import os
+import time
 import picamera as cam
+from fractions import Fraction
 
 def take_photo(savepath, long = 0):
     """ Takes a picture, resolution and exposure can be controlled
@@ -14,7 +16,7 @@ def take_photo(savepath, long = 0):
     resolution = full_hd
 
     # Picture taking
-    with picamera.PiCamera() as camera:
+    with cam.PiCamera() as camera:
 	camera.resolution = resolution
 
 	# Long exposure is possible
