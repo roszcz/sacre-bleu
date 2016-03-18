@@ -17,6 +17,13 @@ def take_pictures():
     pictures = cam.take_photos(2, 0)
     da.perform_anal(pictures)
 
+def post_fresh_picture():
+    """ Posts most recent picture taken by the sacrebleu """
+    paths = uc.get_jpgs(us.picture_path())
+    path = paths[-1]
+
+    cp.post_on_wall(path, '')
+
 def clean_up():
     """ Delete everything from the day """
     paths = [us.picture_path(), us.plot_path(),\
@@ -55,13 +62,29 @@ def post_ising_pic():
 def post_ising_vid():
     """ Create timelapse, post to yt, post link on facebook """
     # Attachment facebook info:
+    # Title is not for fb, but for yt and must be poped
     att = {
-            'name' : 'Ising stress test',
-            'caption' : 'fully automatic',
-            'description' : 'metropolis simulation'
+            'name'	    : 'Ising stress test',
+	    'title'	    : '2D Ising Model Simulation',
+            'caption'	    : 'fully automatic',
+            'description'   : 'metropolis simulation'
     }
 
     cp.post_timelapse(us.ising_path(), att)
+
+def post_day_movie():
+    """ Create timelapse, post to yt, post link on facebook """
+    # Attachment facebook info:
+    # Title is not for fb, but for yt and must be poped
+    title = dt.now().strftime('%Y %B %d in super slow motion')
+    att = {
+	    'title'	    : title,
+            'name'	    : 'Ising stress test',
+            'caption'	    : 'fully automatic',
+            'description'   : 'metropolis simulation'
+    }
+
+    cp.post_timelapse(us.picture_path(), att)
 
 def post_sunrise_rgb():
     """ Simple rgb plot from last few hours """

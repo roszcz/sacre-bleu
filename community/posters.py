@@ -21,7 +21,8 @@ def post_to_album(picpath, album_name, message = 'hi'):
 def post_timelapse(foldername, attachment):
     """ Create and post a video """
     # Create ising video
-    video_id = cm.make_video_on_yt(us.ising_path())
+    title = attachment.pop('title')
+    video_id = cm.make_video_on_yt(foldername, title)
 
     # TODO outsorce everything beside the link
     # Declare facebook post

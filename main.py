@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from datetime import datetime as dt
 from utils import camerableu as cam
 from utils import settings as us
 from utils import jobs as uj
@@ -28,6 +29,14 @@ def perform_action(action):
     if 'POST_SUNRISE_RGB' in action:
         print 'posting sunrise rgb plot'
         uj.post_sunrise_rgb()
+    if 'POST_FRESH_PICTURE' in action:
+	print 'posting fresh pic'
+	uj.post_fresh_picture()
+    if 'POST_DAY_TIMELAPSE' in action:
+	print 'posting day movie'
+	uj.post_day_movie()
+
+    print 'actions over at:', dt.now()
 
 def main():
     """ This is run every minute for proper sacrebleuing """
