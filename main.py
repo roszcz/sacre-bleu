@@ -25,6 +25,9 @@ def perform_action(action):
     if 'POST_ISING_VID' in action:
         print 'posting ising vid'
         uj.post_ising_vid()
+    if 'POST_SUNRISE_RGB' in action:
+        print 'posting sunrise rgb plot'
+        uj.post_sunrise_rgb()
 
 def main():
     """ This is run every minute for proper sacrebleuing """

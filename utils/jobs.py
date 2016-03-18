@@ -6,6 +6,7 @@ from datascience import ising as di
 from datascience import analysis as da
 from datascience import plotters as dp
 from datetime import datetime as dt
+import wolframalpha as wa
 import random
 from glob import glob
 import os
@@ -65,4 +66,17 @@ def post_ising_vid():
 def post_sunrise_rgb():
     """ Simple rgb plot from last few hours """
     plotpath = dp.last_five_hours_rgb()
+
+    # Prepare message
+    # Load wolfram
+    with open('wolfram.secret','r') as fin:
+        secret = fin.read().strip('\n')
+    client = wa.Client(secret)
+    res = client.query('sunrise in Krakow Polska')
+
+    # Parse sunrise hour string
+    msg = 'sunrise prediction: ' + ' '.join(res.pods[1].text.split()[0:2])
+
+    # Post on facebook!
+    cp.post_on_wall(plotpath, msg)
     os.remove(plotpath)
