@@ -165,7 +165,7 @@ def make_brightness_plot(times, vals):
 
     return filename
 
-def last_five_hours_rgb():
+def last_hours_rgb(howmany):
     """ Procedure simplifying wrapper """
     # Init database
     base = db.get_base()
@@ -173,7 +173,7 @@ def last_five_hours_rgb():
 
     # Prepare time span
     end = dt.now()
-    start = end - datetime.timedelta(hours = 5)
+    start = end - datetime.timedelta(hours = howmany)
     starts = start.strftime('%x %X')
     ends = end.strftime('%x %X')
 

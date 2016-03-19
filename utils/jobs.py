@@ -88,7 +88,7 @@ def post_day_movie():
 
 def post_sunrise_rgb():
     """ Simple rgb plot from last few hours """
-    plotpath = dp.last_five_hours_rgb()
+    plotpath = dp.last_hours_rgb(3)
 
     # Prepare message
     # Load wolfram
