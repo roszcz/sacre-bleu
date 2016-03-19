@@ -79,9 +79,9 @@ def post_day_movie():
     title = dt.now().strftime('%Y %B %d in super slow motion')
     att = {
 	    'title'	    : title,
-            'name'	    : 'Ising stress test',
+            'name'	    : title,
             'caption'	    : 'fully automatic',
-            'description'   : 'metropolis simulation'
+            'description'   : 'timelapse'
     }
 
     cp.post_timelapse(us.picture_path(), att)
