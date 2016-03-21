@@ -53,8 +53,8 @@ class Plot(object):
             minor = dates.HourLocator(interval = 1)
         else:
             formater = '%H'
-            major = dates.HourLocator(interval = 1)
-            minor = dates.HourLocator(interval = 1)
+            major = dates.HourLocator(interval = 8)
+            minor = dates.HourLocator(interval = 8)
 
         self.formater = dates.DateFormatter(formater)
         self.major_formatter = major
@@ -158,7 +158,7 @@ def make_brightness_plot(times, vals):
     """ Takes data and returns a filename """
     filename = 'brighness.png'
     plot = Plot(times, vals)
-    plot.set_legend('Brightness')
+    plot.set_legend(['Brightness'])
     plot.set_ylabel('VALUE\nPER PIXEL')
 
     plot.make_figure(filename)

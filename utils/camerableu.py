@@ -27,6 +27,9 @@ def take_photos(howmany = 1, exposure = 0):
         # Write pictures
         cam.take_photo(savepath, long = exposure)
 
+	# Add big black cock
+	add_cock(savepath)
+
         # Return filenames
         pictures.append(savepath)
 

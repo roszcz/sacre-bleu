@@ -26,23 +26,15 @@ def post_fresh_picture():
 
 def clean_up():
     """ Delete everything from the day """
-    paths = [us.picture_path(), us.plot_path(),\
-             us.ising_path()]
-    paths = [path + '/*' for path in paths]
+    # Delete every-minute pictures
+    path = us.picture_path() + '/*'
+    for file in glob(path):
+	if os.path.isfile(file):
+	    os.remove(file)
 
-    for path in paths:
-        for file in glob(path):
-            if os.path.isfile(file):
-                os.remove(file)
-
-    # TODO remake this so you have to specify all paths to clear
-    # Clean mpg file
-    moviepath = 'img/ising.mpg'
-    os.remove(moviepath)
-
-    # Ising pickle file
-    picklepath = 'data/ising.pickle'
-    os.remove(picklepath)
+    # Delete full timelapse
+    timelapse = 'img/pics.mpg'
+    os.remove(timelapse)
 
 def iterate_ising():
     """ This is a stress test """
@@ -72,6 +64,20 @@ def post_ising_vid():
 
     cp.post_timelapse(us.ising_path(), att)
 
+    # Cleanup after week of isinging
+    path = us.ising_path() + '/*'
+    for file in glob(path):
+	if os.path.isfile(file):
+	    os.remove(file)
+
+    # Clean mpg file
+    ising_mpg = 'img/ising.mpg'
+    os.remove(ising_mpg)
+
+    # Ising pickle file
+    picklepath = 'data/ising.pickle'
+    os.remove(picklepath)
+
 def post_day_movie():
     """ Create timelapse, post to yt, post link on facebook """
     # Attachment facebook info:
@@ -88,7 +94,7 @@ def post_day_movie():
 
 def post_sunrise_rgb():
     """ Simple rgb plot from last few hours """
-    plotpath = dp.last_hours_rgb(3)
+    plotpath = dp.last_hours_rgb(2)
 
     # Prepare message
     # Load wolfram

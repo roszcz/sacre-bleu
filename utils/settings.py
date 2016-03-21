@@ -99,11 +99,40 @@ def daily_actions():
 
     return actions
 
+def weekly_actions():
+    """ Once a week, on any day """
+    # Get current timestamp
+    now = dt.now()
+
+    # Load configuration
+    cfg = load_cfg()
+
+    # Prepare container for actions
+    actions = []
+
+    # Check if now is in the range for every-minute action
+    weekly = cfg['weekly']
+
+    # Check timing
+    for event in weekly:
+	wday = int(weekly[event]['day'])
+	if wday is now.weekday():
+	    when = weekly[event]['when']
+	    when = dt.strptime(when, '%H:%M')
+	    when = now.replace(hour = when.hour, minute = when.minute)
+
+	    if when == now:
+		actions += weekly[event]['actions']
+		print actions
+
+    return actions
+
 def get_actions():
     """ Find out what actions are to be performed right now """
     actions = []
 
     actions += minute_actions()
     actions += daily_actions()
+    actions += weekly_actions()
 
     return actions
