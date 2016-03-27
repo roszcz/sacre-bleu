@@ -6,6 +6,7 @@ from datascience import ising as di
 from datascience import analysis as da
 from datascience import plotters as dp
 from datetime import datetime as dt
+from datetime import timedelta
 import wolframalpha as wa
 import random
 from glob import glob
@@ -109,3 +110,45 @@ def post_sunrise_rgb():
     # Post on facebook!
     cp.post_on_wall(plotpath, msg)
     os.remove(plotpath)
+
+def compare_week_brightness():
+    """ Post a plot that shows change in days brigthness over a week """
+    now = dt.now()
+
+    # We assume this will be run after sunset
+    aend = now
+    # Sunrise must be after this hour
+    astart = now.replace(hour = 1)
+
+    astarts = astart.strftime('%x %X')
+    aends = aend.strftime('x %X')
+
+    # Other series of data must come from a 7 days ago
+    bstart = astart - timedelta(days=7)
+    bend = aend - timedelta(days=7)
+
+    # Get the data from the database
+    base = db.get_base()
+    sd = base['sacredata']
+
+    aseries = sd.loc[astarts:aends, ['value']]
+    bseries = sd.loc[bstarts:bends, ['value']]
+
+    times = aseries.index
+
+    avals = aseries.values
+    bvals = bseries.values
+
+    vals = np.concatenate((avals, bvals), axis=1)
+    
+    plot = dp.Plot(times, vals)
+    plot.ser_colors(['c', 'g'])
+    plot.set_legend(['Today', 'A week ago'])
+    plot.set_ylabel('brightness [a.u.]')
+
+    filepath = 'dupa.png'
+    plot.make_figure(filepath)
+
+    cp.post_on_wall(filepath, '')
+
+    os.remove(filepath)

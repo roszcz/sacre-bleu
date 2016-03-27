@@ -30,7 +30,7 @@ class Plot(object):
         timed = self.times[-1] - self.times[0]
 
         # Calculate hours and minutes
-        hours, remainder = divmod(timed.seconds, 3600)
+        hours, remainder = divmod(timed.total_seconds(), 3600)
         minutes, seconds = divmod(remainder, 60)
 
         # Switch-like haxor solution
@@ -49,12 +49,20 @@ class Plot(object):
             minor = dates.HourLocator(interval = 1)
         elif hours < 20:
             formater = '%H'
-            major = dates.HourLocator(interval = 2)
+            major = dates.HourLocator(interval = 6)
             minor = dates.HourLocator(interval = 1)
-        else:
-            formater = '%H'
+	elif hours < 50:
+	    formater = '%H:%M'
             major = dates.HourLocator(interval = 8)
             minor = dates.HourLocator(interval = 8)
+	elif hours < 70:
+	    formater = '%H:%M'
+            major = dates.HourLocator(interval = 10)
+            minor = dates.HourLocator(interval = 10)
+	else:
+	    formater = '%a'
+            major = dates.DayLocator(interval = 1)
+            minor = dates.HourLocator(interval = 12)
 
         self.formater = dates.DateFormatter(formater)
         self.major_formatter = major

@@ -35,6 +35,9 @@ def perform_action(action):
     if 'POST_DAY_TIMELAPSE' in action:
 	print 'posting day movie'
 	uj.post_day_movie()
+    if 'COMPARE_WEEK_BRIGHTNESS' in action:
+	print 'posting week brightness'
+	uj.compare_week_brightness()
 
     print 'actions over at:', dt.now()
 
