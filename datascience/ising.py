@@ -1,3 +1,4 @@
+from datetime import datetime as dt
 from utils import common as uc
 import numpy as np
 import cv2 as cv
@@ -10,7 +11,10 @@ class PersistentIsing(object):
         """ Constructor """
         self.size_y = 72 * 3
         self.size_x = 128 * 3
-        self.T = 1.1
+	if dt.now().day%2 is 0:
+	    self.T = 0.6
+	else:
+	    self.T = 2.5
         self.path = 'data/ising.pickle'
 
     def energy(self, system, N, M):
