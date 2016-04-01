@@ -2,11 +2,13 @@ from utils import camerableu as cam
 from utils import common as uc
 from utils import settings as us
 from community import posters as cp
+from datastorage import databasing as db
 from datascience import ising as di
 from datascience import analysis as da
 from datascience import plotters as dp
 from datetime import datetime as dt
 from datetime import timedelta
+import numpy as np
 import wolframalpha as wa
 import random
 from glob import glob
@@ -121,11 +123,14 @@ def compare_week_brightness():
     astart = now.replace(hour = 1)
 
     astarts = astart.strftime('%x %X')
-    aends = aend.strftime('x %X')
+    aends = aend.strftime('%x %X')
 
     # Other series of data must come from a 7 days ago
     bstart = astart - timedelta(days=7)
     bend = aend - timedelta(days=7)
+
+    bstarts = bstart.strftime('%x %X')
+    bends = bend.strftime('%x %X')
 
     # Get the data from the database
     base = db.get_base()
@@ -139,10 +144,20 @@ def compare_week_brightness():
     avals = aseries.values
     bvals = bseries.values
 
+    # This temporarily fixes issues with daylight 
+    # changes and number of samples per day or whatnot
+    if len(avals) is not len(bvals):
+	alen, blen = len(avals), len(bvals)
+	if alen > blen:
+	    avals = avals[-blen::]
+	    times = bseries.index
+	else:
+	    bvals = bvals[-alen::]
+
     vals = np.concatenate((avals, bvals), axis=1)
     
     plot = dp.Plot(times, vals)
-    plot.ser_colors(['c', 'g'])
+    plot.set_colors(['c', 'g'])
     plot.set_legend(['Today', 'A week ago'])
     plot.set_ylabel('brightness [a.u.]')
 

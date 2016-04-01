@@ -12,8 +12,6 @@ def perform_action(action):
     if 'PERFORM_ANAL' in action:
         print 'anal now'
         uj.perform_anal()
-    if 'POST_PLOTS' in action:
-        print 'post'
     if 'CLEAN_UP' in action:
         print 'cleaning'
         uj.clean_up()
