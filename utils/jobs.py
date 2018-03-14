@@ -1,18 +1,18 @@
-from utils import camerableu as cam
+import os
+import random
+import numpy as np
+from glob import glob
+import wolframalpha as wa
+from datetime import timedelta
 from utils import common as uc
 from utils import settings as us
+from utils import camerableu as cam
+from datetime import datetime as dt
 from community import posters as cp
-from datastorage import databasing as db
 from datascience import ising as di
 from datascience import analysis as da
 from datascience import plotters as dp
-from datetime import datetime as dt
-from datetime import timedelta
-import numpy as np
-import wolframalpha as wa
-import random
-from glob import glob
-import os
+from datastorage import databasing as db
 
 # FIXME this needs a new name
 def take_pictures():
